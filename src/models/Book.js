@@ -82,4 +82,4 @@ const Book = sequelize.define("Book", {
 })
 
 
-export default Book;
+module.exports = Book;

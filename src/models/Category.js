@@ -25,4 +25,4 @@ const Category = sequelize.define("Categories", {
 })
 
 
-export default Category;
+module.exports = Category;

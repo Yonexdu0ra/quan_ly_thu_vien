@@ -33,4 +33,4 @@ const Fine = sequelize.define("Fines", {
 })
 
 
-export default Fine;
+module.exports = Fine;

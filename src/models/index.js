@@ -8,20 +8,20 @@ const Fine = require("./Fine");
 const Account = require("./Account");
 
 // User - Account: 1-1
-User.hasOne(Account, { foreignKey: "userId", as: "account" });
-Account.belongsTo(User, { foreignKey: "userId", as: "user" });
+User.hasOne(Account, { foreignKey: "user_id", as: "account" });
+Account.belongsTo(User, { foreignKey: "user_id", as: "user" });
 
 // Category - Book: 1-N
 Category.hasMany(Book, { foreignKey: "category_id", as: "books" });
+Author.hasMany(Book, { foreignKey: "author_id", as: "books" });
+Borrow.belongsTo(Book, { foreignKey: "book_id", as: "book" });
 Book.belongsTo(Category, { foreignKey: "category_id", as: "category" });
 
 // Author - Book: 1-N
-Author.hasMany(Book, { foreignKey: "author_id", as: "books" });
 Book.belongsTo(Author, { foreignKey: "author_id", as: "author" });
 
 // Book - Borrow: 1-N
 Book.hasMany(Borrow, { foreignKey: "book_id", as: "borrows" });
-Borrow.belongsTo(Book, { foreignKey: "book_id", as: "book" });
 
 // User (người mượn) - Borrow
 User.hasMany(Borrow, { foreignKey: "borrow_id", as: "borrows" });
@@ -35,7 +35,7 @@ Borrow.belongsTo(User, { foreignKey: "approver_id", as: "approver" });
 Borrow.hasOne(Fine, { foreignKey: "borrow_id", as: "fine" });
 Fine.belongsTo(Borrow, { foreignKey: "borrow_id", as: "borrow" });
 
-export {
+module.exports = {
     User,
     Book,
     Author,

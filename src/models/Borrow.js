@@ -32,7 +32,7 @@ const Borrow = sequelize.define("Borrows", {
     },
     return_date: {
         type: DataTypes.DATE,
-        allowNull: true,
+        allowNull: false,
         validate: {
             isDate: { msg: "Ngày trả không hợp lệ" },
             isAfter: { args: DataTypes.NOW, msg: "Ngày trả phải sau ngày mượn" },
@@ -44,7 +44,6 @@ const Borrow = sequelize.define("Borrows", {
         allowNull: true,
         validate: {
             isDate: { msg: "Ngày lấy không hợp lệ" },
-
         }
     },
     due_date: {
@@ -87,4 +86,4 @@ const Borrow = sequelize.define("Borrows", {
 })
 
 
-export default Borrow;
+module.exports = Borrow;
