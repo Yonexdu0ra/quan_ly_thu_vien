@@ -47,10 +47,13 @@ class BookController {
     }
     static async addPost(req, res) {
         const { title, author_id, category_id, published_year, isbn, quantity_total, quantity_available, image_cover } = req.body;
-        console.log(req.body);
+        // console.log(req.body);
+        if(quantity_total < quantity_available) {
+            return res.status(400).send("Số lượng có sẵn không thể lớn hơn tổng số lượng");
+        }
 
         const book = await Book.create({ title, author_id, category_id, published_year, isbn, quantity_total, quantity_available, image_cover });
-        console.log(book.dataValues);
+        
         
         res.redirect("/books");
     }
