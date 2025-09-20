@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <h1 class="mb-4">Chi tiết tác giả</h1>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5><%= author.name %></h5>
+        </div>
+        <div class="card-body">
+            <p><strong>ID:</strong> <%= author.id %></p>
+            <p><strong>Tên tác giả:</strong> <%= author.name %></p>
+            <p><strong>Ngày tạo:</strong> <%= author.createdAt.toLocaleString() %></p>
+            <p><strong>Ngày cập nhật:</strong> <%= author.updatedAt.toLocaleString() %></p>
+        </div>
+        <div class="card-footer">
+            <a href="/authors/edit/<%= author.id %>" class="btn btn-success">Sửa</a>
+            <a href="/authors/delete/<%= author.id %>" class="btn btn-danger">Xóa</a>
+            <a href="/authors" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </div>
+
+</div>

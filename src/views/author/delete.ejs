@@ -1,0 +1,10 @@
+<div class="container mt-5">
+    <h1 class="mb-4 text-danger">Xóa tác giả</h1>
+    <div class="card p-4">
+        <p>Bạn có chắc muốn xóa tác giả: <strong><%= author.name %></strong>?</p>
+        <form action="/authors/delete/<%= author.id %>" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-danger">Xóa</button>
+        </form>
+        <a href="/authors" class="btn btn-secondary">Hủy</a>
+    </div>
+</div>

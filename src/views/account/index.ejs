@@ -1,0 +1,33 @@
+<h1 class="mb-4">Danh sách tài khoản</h1>
+<a href="/accounts/add" class="btn btn-primary mb-3">Thêm tài khoản</a>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% accounts.forEach(acc => { %>
+            <tr>
+                <td><%= acc.id %></td>
+                <td><%= acc.username %></td>
+                <td><%= acc.role %></td>
+                <td><%= acc.user ? acc.user.fullname : "-" %></td>
+                <td><%= acc.user ? acc.user.email : "-" %></td>
+                <td>
+                    <a href="/accounts/detail/<%= acc.id %>" class="btn btn-info btn-sm">Xem</a>
+                    <a href="/accounts/edit/<%= acc.id %>" class="btn btn-warning btn-sm">Sửa</a>
+                    <form action="/accounts/delete/<%= acc.id %>" method="POST" style="display:inline-block;" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
+                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>

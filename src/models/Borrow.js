@@ -3,16 +3,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const BorrowStatus = {
-    REQUESTED: "requested",   // Yêu cầu mượn mới
-    APPROVED: "approved",     // Đã duyệt, chờ lấy
-    REJECTED: "rejected",     // Từ chối
-    RESERVED: "reserved",     // Đã đặt chỗ, hẹn lấy
-    BORROWED: "borrowed",     // Đang mượn
-    RETURNED: "returned",     // Đã trả
-    OVERDUE: "overdue",       // Quá hạn
-    CANCELLED: "cancelled"    // Hủy
-};
 
 const Borrow = sequelize.define("Borrows", {
     id: {
@@ -32,11 +22,11 @@ const Borrow = sequelize.define("Borrows", {
     },
     return_date: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
         validate: {
             isDate: { msg: "Ngày trả không hợp lệ" },
-            isAfter: { args: DataTypes.NOW, msg: "Ngày trả phải sau ngày mượn" },
-            notNull: { msg: "Ngày trả không được để trống" }
+            isAfter: { args: new Date().toISOString(), msg: "Ngày trả phải sau ngày mượn" },
+            // notNull: { msg: "Ngày trả không được để trống" }
         }
     },
     pickup_date: {
@@ -51,14 +41,14 @@ const Borrow = sequelize.define("Borrows", {
         allowNull: false,
         validate: {
             isDate: { msg: "Ngày đến hạn không hợp lệ" },
-            isAfter: { args: DataTypes.NOW, msg: "Ngày đến hạn phải sau ngày mượn" },
+            isAfter: { args: new Date().toISOString(), msg: "Ngày đến hạn phải sau ngày mượn" },
             notNull: { msg: "Ngày đến hạn không được để trống" }
         }
     },
     status: {
-        type: DataTypes.ENUM("requested", "approved", "rejected", "reserved", "borrowed", "returned", "overdue", "cancelled"),
+        type: DataTypes.ENUM("Đang yêu cầu mượn", "Đã duyệt, chờ lấy", "Từ chối", "Đang mượn", "Đã trả", "Quá hạn", "Đã hủy"),
         allowNull: false,
-        defaultValue: "requested",
+        defaultValue: "Đang yêu cầu mượn",
     },
 
     book_id: {

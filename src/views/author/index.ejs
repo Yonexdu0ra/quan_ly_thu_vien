@@ -1,0 +1,54 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Quản lý Tác giả</h1>
+
+  <a href="/authors/add" class="btn btn-primary mb-3">Thêm tác giả mới</a>
+  <form action="/authors" method="GET" class="d-flex mb-3" role="search">
+    <input
+      class="form-control me-2"
+      type="search"
+      name="q"
+      placeholder="Tìm kiếm tác giả..."
+      value="<%= typeof query !== 'undefined' ? query : '' %>"
+      aria-label="Search"
+    />
+    <button class="btn btn-outline-success" type="submit">Tìm</button>
+  </form>
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>Tên tác giả</th>
+        <th>Ngày tạo</th>
+        <th>Ngày cập nhật</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% authors.forEach((author, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><a href="/authors/<%= author.id %>"><%= author.name %></a></td>
+        <td><%= author.createdAt.toLocaleDateString() %></td>
+        <td><%= author.updatedAt.toLocaleDateString() %></td>
+        <td>
+          <a
+            href="/authors/edit/<%= author.id %>"
+            class="btn btn-success btn-sm me-1"
+            >Sửa</a
+          >
+          <a
+            href="/authors/delete/<%= author.id %>"
+            class="btn btn-danger btn-sm"
+            >Xóa</a
+          >
+        </td>
+      </tr>
+      <% }) %> <% if (authors.length === 0) { %>
+      <tr>
+        <td colspan="5" class="text-center text-muted">Chưa có tác giả nào.</td>
+      </tr>
+      <% } %>
+      
+    </tbody>
+  </table>
+</div>

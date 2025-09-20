@@ -1,0 +1,13 @@
+<h3><%= book.title %></h3>
+<p><strong>ISBN:</strong> <%= book.isbn %></p>
+<p><strong>Tác giả:</strong> <a href="/authors/<%= book.author.id %>"><%= book.author.name %></a></p>
+<p><strong>Danh mục:</strong> <a href="/categories/<%= book.category.id %>"><%= book.category.name %></a></p>
+<p><strong>Năm xuất bản:</strong> <%= book.published_year %></p>
+<p><strong>Số lượng:</strong> <%= book.quantity_available %> / <%= book.quantity_total %></p>
+<p><strong>Mô tả:</strong> <%= book.description %></p>
+<% if (book.image_cover) { %>
+    <img src="<%= book.image_cover %>" alt="Cover" class="img-fluid mt-3">
+<% } %>
+<a href="/books/edit/<%= book.id %>" class="btn btn-success">Sửa</a>
+<a href="/books/delete/<%= book.id %>" class="btn btn-danger">Xóa</a>
+<a href="/books" class="btn btn-secondary">Quay lại</a>

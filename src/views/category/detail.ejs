@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <h1 class="mb-4">Chi tiết danh mục</h1>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5><%= category.name %></h5>
+        </div>
+        <div class="card-body">
+            <p><strong>ID:</strong> <%= category.id %></p>
+            <p><strong>Tên danh mục:</strong> <%= category.name %></p>
+            <p><strong>Ngày tạo:</strong> <%= category.createdAt.toLocaleString() %></p>
+            <p><strong>Ngày cập nhật:</strong> <%= category.updatedAt.toLocaleString() %></p>
+        </div>
+        <div class="card-footer">
+            <a href="/categories/edit/<%= category.id %>" class="btn btn-success">Sửa</a>
+            <a href="/categories/delete/<%= category.id %>" class="btn btn-danger">Xóa</a>
+            <a href="/categories" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </div>
+
+</div>

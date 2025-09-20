@@ -1,0 +1,40 @@
+<h1 class="mb-4">Chi tiết phiếu mượn #<%= borrow.id %></h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Sách</th>
+        <td><%= borrow.book.title %></td>
+    </tr>
+    <tr>
+        <th>Người mượn</th>
+        <td><%= borrow.borrower.fullname %></td>
+    </tr>
+    <tr>
+        <th>Ngày mượn</th>
+        <td><%= new Date(borrow.borrow_date).toLocaleDateString() %></td>
+    </tr>
+    <tr>
+        <th>Ngày trả</th>
+        <td><%= new Date(borrow.return_date).toLocaleDateString() %></td>
+    </tr>
+    <tr>
+        <th>Ngày đến hạn</th>
+        <td><%= new Date(borrow.due_date).toLocaleDateString() %></td>
+    </tr>
+    <tr>
+        <th>Ngày lấy</th>
+        <td><%= borrow.pickup_date ? new Date(borrow.pickup_date).toLocaleDateString() : "Chưa lấy" %></td>
+    </tr>
+    <tr>
+        <th>Trạng thái</th>
+        <td><%= borrow.status %></td>
+    </tr>
+    <tr>
+        <th>Người duyệt</th>
+        <td><%= borrow.approver ? borrow.approver.fullname : "Chưa duyệt" %></td>
+    </tr>
+</table>
+
+<a href="/borrows/reader" class="btn btn-secondary">Quay lại</a>
+
+

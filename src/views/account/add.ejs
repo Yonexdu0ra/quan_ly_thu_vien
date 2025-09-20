@@ -1,0 +1,42 @@
+<h1 class="mb-4">Thêm tài khoản</h1>
+
+<form action="/accounts/add" method="POST">
+    <h4>Thông tin tài khoản</h4>
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" name="username" id="username" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" name="password" id="password" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="role" class="form-label">Role</label>
+        <select name="role" id="role" class="form-select" required>
+            <option value="Admin">Admin</option>
+            <option value="Librarian">Librarian</option>
+            <option value="Reader">Reader</option>
+        </select>
+    </div>
+
+    <h4 class="mt-4">Thông tin người dùng</h4>
+    <div class="mb-3">
+        <label for="fullname" class="form-label">Họ tên</label>
+        <input type="text" name="fullname" id="fullname" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" name="email" id="email" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="address" class="form-label">Địa chỉ</label>
+        <input type="text" name="address" id="address" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="phone" class="form-label">Số điện thoại</label>
+        <input type="text" name="phone" id="phone" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-success">Thêm</button>
+    <a href="/accounts" class="btn btn-secondary">Quay lại</a>
+</form>

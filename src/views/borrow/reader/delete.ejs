@@ -1,0 +1,5 @@
+<form action="/borrows/cancel/<%= borrow.id %>" method="POST">
+  <h2>Bạn có chắc muốn hủy mượn sách <%= borrow.book.title %>?</h2>
+  <a href="/borrows/reader" class="btn btn-secondary btn-sm">Quay lại</a>
+  <button type="submit" class="btn btn-danger btn-sm">Hủy</button>
+</form>

@@ -1,0 +1,8 @@
+<h1 class="mb-4">Xóa tài khoản #<%= account.id %></h1>
+
+<p>Bạn có chắc muốn xóa tài khoản <strong><%= account.username %></strong> không?</p>
+
+<form action="/accounts/delete/<%= account.id %>" method="POST">
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a href="/accounts" class="btn btn-secondary">Hủy</a>
+</form>

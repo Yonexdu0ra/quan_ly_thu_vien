@@ -1,0 +1,48 @@
+<h1 class="mb-4">Danh sách phiếu mượn</h1>
+<a href="/borrows/add" class="btn btn-primary mb-3">Thêm phiếu mượn</a>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Sách</th>
+      <th>Người mượn</th>
+      <th>Ngày mượn</th>
+      <th>Ngày hẹn trả</th>
+      <th>Ngày trả</th>
+      <th>Ngày lấy sách</th>
+      <th>Trạng thái</th>
+      <th>Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% borrows.forEach(b => { %>
+    <tr>
+      <td><%= b.id %></td>
+      <td><%= b.book.title %></td>
+      <td><%= b.borrower.fullname %></td>
+      <td><%= new Date(b.borrow_date).toLocaleDateString() %></td>
+      <td>
+        <%= b.due_date ? new Date(b.due_date).toLocaleDateString() : '' %>
+      </td>
+      <td>
+        <%= b.return_date ? new Date(b.return_date).toLocaleDateString() : '' %>
+      </td>
+      <td>
+        <%= b.pickup_date ? new Date(b.pickup_date).toLocaleDateString() : '' %>
+      </td>
+      <td><%= b.status %></td>
+      <td>
+        <a href="/borrows/detail/<%= b.id %>" class="btn btn-info btn-sm"
+          >Xem chi tiết</a
+        >
+        <a
+          href="/borrows/reader/cancel/<%= b.id %>"
+          class="btn btn-danger btn-sm"
+          >Hủy</a
+        >
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

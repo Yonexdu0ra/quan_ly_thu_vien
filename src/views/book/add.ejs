@@ -1,0 +1,56 @@
+<div class="container mt-5">
+    <h1 class="mb-4">Thêm sách mới</h1>
+    <div class="card p-4">
+        <form action="/books/add" method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Tiêu đề</label>
+                <input type="text" name="title" id="title" class="form-control" required maxlength="200">
+            </div>
+            <div class="mb-3">
+                <label for="isbn" class="form-label">ISBN</label>
+                <input type="text" name="isbn" id="isbn" class="form-control" required minlength="10" maxlength="13">
+            </div>
+            <div class="mb-3">
+                <label for="author_id" class="form-label">Tác giả</label>
+                <select name="author_id" id="author_id" class="form-select" required>
+                    <option value="">-- Chọn tác giả --</option>
+                    <% authors.forEach(author => { %>
+                        <option value="<%= author.id %>"><%= author.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="category_id" class="form-label">Danh mục</label>
+                <select name="category_id" id="category_id" class="form-select" required>
+                    <option value="">-- Chọn danh mục --</option>
+                    <% categories.forEach(category => { %>
+                        <option value="<%= category.id %>"><%= category.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="published_year" class="form-label">Năm xuất bản</label>
+                <input type="number" name="published_year" id="published_year" class="form-control" required min="1500" max="<%= new Date().getFullYear() %>">
+            </div>
+            <div class="mb-3">
+                <label for="quantity_total" class="form-label">Tổng số lượng</label>
+                <input type="number" name="quantity_total" id="quantity_total" class="form-control" required min="0">
+            </div>
+            <div class="mb-3">
+                <label for="quantity_available" class="form-label">Số lượng có sẵn</label>
+                <input type="number" name="quantity_available" id="quantity_available" class="form-control" required min="0">
+            </div>
+            <div class="mb-3">
+                <label for="image_cover" class="form-label">Ảnh bìa (URL)</label>
+                <input type="url" name="image_cover" id="image_cover" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Mô tả</label>
+                <textarea name="description" id="description" class="form-control" rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Thêm sách</button>
+            <a href="/books" class="btn btn-secondary">Quay lại</a>
+        </form>
+    </div>
+</div>

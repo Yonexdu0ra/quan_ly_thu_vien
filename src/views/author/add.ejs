@@ -1,0 +1,13 @@
+<div class="container mt-5">
+    <h1 class="mb-4">Thêm tác giả mới</h1>
+    <div class="card p-4">
+        <form action="/authors/add" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Tên tác giả</label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="Nhập tên tác giả" required minlength="3" maxlength="100">
+            </div>
+            <button type="submit" class="btn btn-primary">Thêm</button>
+            <a href="/authors" class="btn btn-secondary">Quay lại</a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Quản lý Sách</h1>
+
+  <a href="/books/add" class="btn btn-primary mb-3">Thêm sách mới</a>
+  <form>
+    <input
+      class="form-control me-2 mb-3"
+      type="search"
+      placeholder="Tìm kiếm sách..."
+      aria-label="Search"
+    />
+    <button class="btn btn-outline-success mb-3" type="submit">Tìm</button>
+  </form>
+  <table class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>Tiêu đề</th>
+        <th>ISBN</th>
+        <th>Tác giả</th>
+        <th>Danh mục</th>
+        <th>Năm xuất bản</th>
+        <th>Số lượng</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% books.forEach((book, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td>
+          <a href="/books/<%= book.id %>"><%= book.title %></a>
+        </td>
+        <td><%= book.isbn %></td>
+        <td><%= book.author.name %></td>
+        <td><%= book.category.name %></td>
+        <td><%= book.published_year %></td>
+        <td><%= book.quantity_available %> / <%= book.quantity_total %></td>
+        <td>
+          <a
+            href="/books/edit/<%= book.id %>"
+            class="btn btn-success btn-sm me-1"
+            >Sửa</a
+          >
+          <a href="/books/delete/<%= book.id %>" class="btn btn-danger btn-sm"
+            >Xóa</a
+          >
+        </td>
+      </tr>
+      <% }) %> <% if (books.length === 0) { %>
+      <tr>
+        <td colspan="8" class="text-center text-muted">Chưa có sách nào.</td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>

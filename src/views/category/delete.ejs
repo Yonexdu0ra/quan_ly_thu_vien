@@ -1,0 +1,10 @@
+<div class="container mt-5">
+    <h1 class="mb-4 text-danger">Xóa danh mục</h1>
+    <div class="card p-4">
+        <p>Bạn có chắc muốn xóa danh mục: <strong><%= category.name %></strong>?</p>
+        <form action="/categories/delete/<%= category.id %>" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-danger">Xóa</button>
+        </form>
+        <a href="/categories" class="btn btn-secondary">Hủy</a>
+    </div>
+</div>

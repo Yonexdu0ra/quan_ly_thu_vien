@@ -1,0 +1,70 @@
+<h1 class="mb-4">Thêm phiếu mượn</h1>
+
+<form action="/borrows/add" method="POST">
+    <div class="mb-3">
+        <label for="book_id" class="form-label">Sách</label>
+        <select name="book_id" id="book_id" class="form-select" required>
+            <option value="">-- Chọn sách --</option>
+            <% books.forEach(book => { %>
+                <option value="<%= book.id %>"><%= book.title %></option>
+            <% }) %>
+        </select>
+    </div>
+<!-- 
+    <div class="mb-3">
+        <label for="borrower_id" class="form-label">Người mượn</label>
+        <select name="borrow_id" id="borrow_id" class="form-select" required>
+            <option value="">-- Chọn người mượn --</option>
+            <% users.forEach(user => { %>
+                <option value="<%= user.id %>"><%= user.name %></option>
+            <% }) %>
+        </select>
+    </div> -->
+
+    <div class="mb-3">
+        <label for="borrow_date" class="form-label">Ngày mượn</label>
+        <input type="date" name="borrow_date" id="borrow_date" class="form-control" required>
+    </div>
+
+    <!-- <div class="mb-3">
+        <label for="return_date" class="form-label">Ngày trả</label>
+        <input type="date" name="return_date" id="return_date" class="form-control" required>
+    </div> -->
+
+    <div class="mb-3">
+        <label for="due_date" class="form-label">Ngày đến hạn</label>
+        <input type="date" name="due_date" id="due_date" class="form-control" required>
+    </div>
+
+    <!-- <div class="mb-3">
+        <label for="status" class="form-label">Trạng thái</label>
+        <select name="status" id="status" class="form-select">
+            <option value="requested">Requested</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="reserved">Reserved</option>
+            <option value="borrowed">Borrowed</option>
+            <option value="returned">Returned</option>
+            <option value="overdue">Overdue</option>
+            <option value="cancelled">Cancelled</option>
+        </select>
+    </div> -->
+
+    <!-- <div class="mb-3">
+        <label for="pickup_date" class="form-label">Ngày lấy (nếu có)</label>
+        <input type="date" name="pickup_date" id="pickup_date" class="form-control">
+    </div> -->
+
+    <!-- <div class="mb-3">
+        <label for="approver_id" class="form-label">Người duyệt (nếu có)</label>
+        <select name="approver_id" id="approver_id" class="form-select">
+            <option value="">-- Chọn người duyệt --</option>
+            <% users.forEach(user => { %>
+                <option value="<%= user.id %>"><%= user.name %></option>
+            <% }) %>
+        </select>
+    </div> -->
+
+    <button type="submit" class="btn btn-success">Thêm</button>
+    <a href="/borrows/reader" class="btn btn-secondary">Quay lại</a>
+</form>

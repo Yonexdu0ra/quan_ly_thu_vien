@@ -1,4 +1,4 @@
-const { Account } = require("../models");
+const { Account, User } = require("../models");
 
 
 
@@ -6,7 +6,7 @@ class AccountService {
 
     static async getAllAccounts() {
         try {
-            const accounts = await Account.findAll({});
+            const accounts = await Account.findAll();
             return accounts;
         } catch (error) {
             return [];
@@ -54,7 +54,7 @@ class AccountService {
     }
     static async getAccountByUsername(username) {
         try {
-            const account = await Account.findOne({ where: { username } });
+            const account = await Account.findOne({ where: { username },  include: [{ model: User, as: 'user' ,attributes: ['fullname']}] });
             return account;
         } catch (error) {
             return null;

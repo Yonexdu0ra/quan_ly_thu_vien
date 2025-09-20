@@ -1,0 +1,5 @@
+<p>Bạn có chắc muốn xóa sách: <strong><%= book.title %></strong>?</p>
+<form action="/books/delete/<%= book.id %>" method="POST">
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a href="/books" class="btn btn-secondary">Hủy</a>
+</form>

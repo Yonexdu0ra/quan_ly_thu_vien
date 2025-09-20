@@ -22,7 +22,7 @@ const authMiddleware = async (req, res, next) => {
         // Access token hết hạn nhưng refresh token còn hạn → tạo access token mới
         if (decodedAccessToken === "TokenExpiredError" && decodedRefreshToken && decodedRefreshToken !== "TokenExpiredError") {
             const newAccessToken = await encodeJWT(
-                { id: decodedRefreshToken.id, role: decodedRefreshToken.role, user_id: decodedRefreshToken.user_id },
+                { id: decodedRefreshToken.id, role: decodedRefreshToken.role, user_id: decodedRefreshToken.user_id, fullname: decodedRefreshToken.fullname },
                 '15m'
             );
 
