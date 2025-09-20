@@ -11,7 +11,11 @@ const authMiddleware = async (req, res, next) => {
         if (req.path.startsWith("/auth/login") && decodedAccessToken && decodedAccessToken !== "TokenExpiredError") {
             return res.redirect("/");
         }
-        if (req.path.startsWith("/auth/login") && !decodedAccessToken || decodedAccessToken === "TokenExpiredError") {
+        
+        
+        if (req.path.startsWith("/auth/login") && !decodedAccessToken || decodedAccessToken !== "TokenExpiredError") {
+          
+            
             return next();
         }
 
@@ -30,7 +34,6 @@ const authMiddleware = async (req, res, next) => {
             return res.redirect("/auth/login");
         }
         req.user = decodedAccessToken;
-        console.log(decodedAccessToken);
         
         next();
     } catch (error) {
