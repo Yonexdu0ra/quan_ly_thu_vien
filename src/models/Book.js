@@ -33,10 +33,10 @@ const Book = sequelize.define("Book", {
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            notEmpty: { msg: "Ngày xuất bản không được để trống" },
-            isInt: { msg: "Ngày xuất bản phải là số nguyên" },
-            min: { args: [1500], msg: "Ngày xuất bản phải lớn hơn 1500" },
-            max: { args: [new Date().getFullYear()], msg: "Ngày xuất bản không được lớn hơn năm hiện tại" }
+            notEmpty: { msg: "Năm xuất bản không được để trống" },
+            isInt: { msg: "Năm xuất bản phải là số nguyên" },
+            min: { args: [1500], msg: "Năm xuất bản phải lớn hơn 1500" },
+            max: { args: [new Date().getFullYear()], msg: "Năm xuất bản không được lớn hơn năm hiện tại" }
         }
     },
     quantity_total: {

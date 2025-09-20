@@ -27,8 +27,8 @@
                 <td><%= b.pickup_date ? new Date(b.pickup_date).toLocaleDateString() : '' %></td>
                 <td><%= b.status %></td>
                 <td>
-                    <a href="/borrows/detail/<%= b.id %>" class="btn btn-info btn-sm">Xem chi tiết</a>
-                    <a href="/borrows/update/<%= b.id %>" class="btn btn-warning btn-sm">Cập nhật trạng thái</a>
+                    <a href="/borrows/reader/detail/<%= b.id %>" class="btn btn-info btn-sm">Xem chi tiết</a>
+                    <a href="/borrows/librarian/update/<%= b.id %>" class="btn btn-warning btn-sm">Cập nhật trạng thái</a>
                     
                 </td>
             </tr>
