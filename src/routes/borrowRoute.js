@@ -14,5 +14,12 @@ router.post("/reader/cancel/:id", BorrowController.deleteReaderPost);
 
 
 router.get("/librarian", BorrowController.indexLibrarian);
+router.get("/librarian/edit/:id", BorrowController.updateLibrarian);
+router.get("/librarian/detail/:id", BorrowController.detailLibrarian);
+router.get("/librarian/approve/:id", BorrowController.acceptBorrowPost);
+router.get("/librarian/reject/:id", BorrowController.rejectBorrowPost);
+router.get("/librarian/expire/:id", BorrowController.markAsExpiredPost);
+
+router.post("/librarian/edit/:id", BorrowController.updateLibrarianPost);
 
 module.exports = router;

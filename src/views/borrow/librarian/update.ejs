@@ -1,0 +1,99 @@
+<h1 class="mb-4">Cập nhật trạng thái phiếu mượn</h1>
+
+<form action="/borrows/librarian/edit/<%= borrow.id %>" method="POST">
+  <div class="mb-3">
+    <label for="book_id" class="form-label">Sách</label>
+    <input
+      type="text"
+      name="book_id"
+      id="book_id"
+      class="form-control"
+      value="<%= borrow.book.title %>"
+      disabled
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="borrower_id" class="form-label">Người mượn</label>
+    <input
+      type="text"
+      name="borrower_id"
+      id="borrower_id"
+      class="form-control"
+      value="<%= borrow.borrower.fullname %>"
+      disabled
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="borrow_date" class="form-label">Ngày mượn</label>
+    <input
+      type="date"
+      name="borrow_date"
+      id="borrow_date"
+      class="form-control"
+      required
+      value="<%= borrow.borrow_date ? new Date(borrow.borrow_date).toISOString().split('T')[0] : '' %>"
+      disabled
+      />
+  </div>
+
+  <div class="mb-3">
+    <label for="return_date" class="form-label">Ngày trả</label>
+    <input
+      type="date"
+      name="return_date"
+      id="return_date"
+      class="form-control"
+      
+      value="<%= borrow.return_date ? new Date(borrow.return_date).toISOString().split('T')[0] : '' %>"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="due_date" class="form-label">Ngày đến hạn</label>
+    <input
+      type="date"
+      name="due_date"
+      id="due_date"
+      class="form-control"
+      required
+      value="<%= borrow.due_date ? new Date(borrow.due_date).toISOString().split('T')[0] : '' %>"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="status" class="form-label">Trạng thái</label>
+    <select name="status" id="status" class="form-select">
+      <% borrowStatus.forEach(statusOption => { %>
+        <option value="<%= statusOption %>" <%= borrow.status === statusOption ? 'selected' : '' %>><%= statusOption %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="pickup_date" class="form-label">Ngày lấy</label>
+    <input
+      type="date"
+      name="pickup_date"
+      id="pickup_date"
+      class="form-control"
+      value="<%= borrow.pickup_date ? new Date(borrow.pickup_date).toISOString().split('T')[0] : '' %>"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="approver_id" class="form-label">Người duyệt</label>
+   <input
+      type="text"
+      name="approver_id"
+      id="approver_id"
+      class="form-control"
+      value="<%= borrow.approver ? borrow.approver.fullname : '' %>"
+      disabled
+    />
+  </div>
+
+  <button type="submit" class="btn btn-success">Cập nhật</button>
+  <a href="/borrows/librarian" class="btn btn-secondary">Quay lại</a>
+</form>

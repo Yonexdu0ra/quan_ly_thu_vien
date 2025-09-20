@@ -28,6 +28,7 @@ app.use((req, res, next) => {
     res.locals.layout = layout;
     res.locals.role = role;
     res.locals.fullname = req?.user?.fullname;
+    res.locals.borrowStatus = ["Đang yêu cầu mượn", "Đã duyệt, chờ lấy", "Từ chối", "Đang mượn", "Đã trả", "Quá hạn", "Đã hủy"]
     next();
 });
 

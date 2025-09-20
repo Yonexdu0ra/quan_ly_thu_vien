@@ -13,7 +13,7 @@ class BorrowController {
             ]
         });
         console.log(borrows);
-        
+
         res.render("borrow/reader/index", { title: "Quản lý phiếu mượn", borrows });
     }
 
@@ -103,18 +103,80 @@ class BorrowController {
         });
         res.render("borrow/librarian/index", { title: "Quản lý phiếu mượn", borrows });
     }
-    
 
+    static async detailLibrarian(req, res) {
+        const borrowId = req.params.id;
+        const borrow = await Borrow.findByPk(borrowId, {
+            include: [
+                { model: Book, as: 'book' },
+                { model: User, as: 'borrower' },
+                { model: User, as: 'approver' }
+            ]
+        });
+        if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+
+        res.render("borrow/librarian/detail", { title: "Chi tiết phiếu mượn", borrow });
+    }
 
     static async updateLibrarian(req, res) {
         const approver_id = req.user.user_id;
         const borrowId = req.params.id;
         // const { status, return_date, pickup_date } = req.body;
-        const borrow = await Borrow.findByPk(borrowId);
+        const borrow = await Borrow.findByPk(borrowId, {
+            include: [
+                { model: Book, as: 'book' },
+                { model: User, as: 'borrower' },
+                { model: User, as: 'approver' }
+            ]
+        });
         if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
         // await borrow.update({ status, return_date, pickup_date, approver_id });
         return res.render("borrow/librarian/update", { title: "Cập nhật phiếu mượn", borrow });
     }
+    static async acceptBorrowPost(req, res) {
+        const approver_id = req.user.user_id;
+        const borrowId = req.params.id;
+        // const { status, return_date, pickup_date } = req.body;
+        const borrow = await Borrow.findByPk(borrowId);
+        if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+        await borrow.update({ status: "Đã duyệt, chờ lấy", approver_id });
+        res.redirect("/borrows/librarian");
+    }
+    static async rejectBorrowPost(req, res) {
+        const approver_id = req.user.user_id;
+        const borrowId = req.params.id;
+        const borrow = await Borrow.findByPk(borrowId);
+        if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+        await borrow.update({ status: "Từ chối", approver_id });
+        res.redirect("/borrows/librarian");
+    }
+    static async markAsExpiredPost(req, res) {
+        const approver_id = req.user.user_id;
+        const borrowId = req.params.id;
+        // const { status, return_date, pickup_date } = req.body;
+        const borrow = await Borrow.findByPk(borrowId);
+        if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+        await borrow.update({ status: "Quá hạn", approver_id });
+        res.redirect("/borrows/librarian");
+    }
+     static async updateLibrarianPost(req, res) {
+        const approver_id = req.user.user_id;
+        const borrowId = req.params.id;
+        const { status, return_date = null, pickup_date = null } = req.body;
+        const borrow = await Borrow.findByPk(borrowId, {
+            include: [
+                { model: Book, as: 'book' },
+                { model: User, as: 'borrower' },
+                { model: User, as: 'approver' }
+            ]
+        });
+        if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+        
+        await borrow.update({ status, return_date, pickup_date, approver_id: borrow.approver_id ? borrow.approver_id : approver_id });
+        return res.redirect("/borrows/librarian");  
+    }
+
+
 }
 
 module.exports = BorrowController;
