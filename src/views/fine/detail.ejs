@@ -1,0 +1,15 @@
+<h1>Chi tiết Phiếu Phạt</h1>
+
+  <ul class="list-group">
+    <li class="list-group-item"><strong>ID:</strong> <%= fine.id %></li>
+    <li class="list-group-item"><strong>Số tiền:</strong> <%= fine.amount %> ₫</li>
+    <li class="list-group-item"><strong>Trạng thái:</strong> <%= fine.isPaid ? "Đã trả" : "Chưa trả" %></li>
+    <li class="list-group-item"><strong>Borrow ID:</strong> <%= fine.borrow_id %></li>
+    <!-- <li class="list-group-item"><strong>Sách:</strong> <%= fine.borrow.book.title %></li> -->
+    <li class="list-group-item"><strong>Ngày tạo:</strong> <%= fine.createdAt.toLocaleString() %></li>
+    <li class="list-group-item"><strong>Cập nhật lần cuối:</strong> <%= fine.updatedAt.toLocaleString() %></li>
+  </ul>
+
+  <a href="/fines/edit/<%= fine.id %>" class="btn btn-warning mt-3">Sửa</a>
+  <a href="/fines/delete/<%= fine.id %>" class="btn btn-danger mt-3">Xóa</a>
+  <a href="/fines" class="btn btn-secondary mt-3">Quay lại</a>

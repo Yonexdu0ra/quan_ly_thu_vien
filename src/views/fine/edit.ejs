@@ -1,0 +1,21 @@
+<h1>Sửa Phiếu Phạt</h1>
+
+  <form action="/fines/edit/<%= fine.id %>" method="POST">
+    <div class="mb-3">
+      <label for="amount" class="form-label">Số tiền</label>
+      <input type="number" step="0.01" class="form-control" name="amount" value="<%= fine.amount %>" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="borrow_id" class="form-label">Borrow ID</label>
+      <input type="number" class="form-control" name="borrow_id" value="<%= fine.borrow_id %>" required>
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" name="isPaid" value="true" <%= fine.isPaid ? 'checked' : '' %>>
+      <label class="form-check-label">Đã trả</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    <a href="/fines" class="btn btn-secondary">Hủy</a>
+  </form>

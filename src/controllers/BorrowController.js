@@ -157,8 +157,15 @@ class BorrowController {
         const approver_id = req.user.user_id;
         const borrowId = req.params.id;
         // const { status, return_date, pickup_date } = req.body;
-        const borrow = await Borrow.findByPk(borrowId);
+        const borrow = await Borrow.findByPk(borrowId, {
+            include: {
+                model: Fine, as: 'fine'
+            }
+        });
         if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+        if (!borrow.fine) {
+            await Fine.create({ amount: 50000, isPaid: false, borrow_id: borrow.id });
+        }
         await borrow.update({ status: "Quá hạn", approver_id });
         res.redirect("/borrows/librarian");
     }

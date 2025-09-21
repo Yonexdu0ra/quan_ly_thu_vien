@@ -1,0 +1,16 @@
+<h1>Thêm Phiếu Phạt</h1>
+
+  <form action="/fines/add" method="POST">
+    <div class="mb-3">
+      <label for="amount" class="form-label">Số tiền</label>
+      <input type="number" step="0.01" class="form-control" name="amount" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="borrow_id" class="form-label">Borrow ID</label>
+      <input type="number" class="form-control" name="borrow_id" required>
+    </div>
+
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a href="/fines" class="btn btn-secondary">Hủy</a>
+  </form>

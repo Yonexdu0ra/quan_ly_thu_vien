@@ -1,0 +1,8 @@
+<h1>Xóa Phiếu Phạt</h1>
+
+  <p>Bạn có chắc muốn xóa phiếu phạt ID <strong><%= fine.id %></strong> (số tiền: <%= fine.amount %> ₫)?</p>
+
+  <form action="/fines/delete/<%= fine.id %>" method="POST">
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a href="/fines" class="btn btn-secondary">Hủy</a>
+  </form>
