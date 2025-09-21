@@ -5,6 +5,7 @@ const bookRoute = require("./bookRoute");
 const borrowRoute = require("./borrowRoute");
 const accountRoute = require("./accountRoute");
 const fineRoute = require("./fineRoute");
+const reportRoute = require("./reportRoute");
 const { requiredRoleAdmin, requiredRoleLibraries } = require('../middleware/authorization')
 const routes = (app) => {
     app.use("/auth", authRoute);
@@ -14,6 +15,7 @@ const routes = (app) => {
     app.use("/borrows", borrowRoute);
     app.use("/accounts", requiredRoleAdmin, accountRoute);
     app.use("/fines", requiredRoleLibraries, fineRoute);
+    app.use("/reports", requiredRoleAdmin, reportRoute);
 };
 
 module.exports = routes;
