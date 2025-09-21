@@ -7,7 +7,7 @@ class BookController {
             include: [{ model: Author, as: 'author' }, { model: Category, as: 'category' }]
         });
         // console.log(books);
-        
+
         res.render("book/index", {
             title: "Quản lý sách", books
         });
@@ -46,20 +46,28 @@ class BookController {
         res.render("book/detail", { title: "Chi tiết sách", book });
     }
     static async addPost(req, res) {
-        const { title, author_id, category_id, published_year, isbn, quantity_total, quantity_available, image_cover } = req.body;
-        // console.log(req.body);
-        if(quantity_total < quantity_available) {
+        const { title, author_id, category_id, published_year, isbn, quantity_total, quantity_available } = req.body;
+
+        const image_cover = req.file.path; // console.log(req.body);
+        if (quantity_total < quantity_available) {
             return res.status(400).send("Số lượng có sẵn không thể lớn hơn tổng số lượng");
         }
 
         const book = await Book.create({ title, author_id, category_id, published_year, isbn, quantity_total, quantity_available, image_cover });
-        
-        
+
+
         res.redirect("/books");
     }
     static async editPost(req, res) {
         const bookId = req.params.id;
-        const { title, author_id, category_id, published_year, isbn, quantity_total, quantity_available, image_cover } = req.body;
+        const { title, author_id, category_id, published_year, isbn, quantity_total, quantity_available } = req.body;
+        if (quantity_total < quantity_available) {
+            return res.status(400).send("Số lượng có sẵn không thể lớn hơn tổng số lượng");
+        }
+        // console.log(req.file);
+        // console.log(req.files);
+        
+        const image_cover = req.file.path;
         const book = await Book.findByPk(bookId);
         if (!book) {
             return res.status(404).send("Sách không tồn tại");
@@ -71,7 +79,7 @@ class BookController {
         book.isbn = isbn;
         book.quantity_total = quantity_total;
         book.quantity_available = quantity_available;
-        book.image_cover = image_cover;
+        book.image_cover = image_cover
         await book.save();
         res.redirect("/books");
     }

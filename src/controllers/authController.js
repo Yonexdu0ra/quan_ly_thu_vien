@@ -11,6 +11,11 @@ class AuthController {
             return res.status(500).render("login", { title: "Đăng nhập", error: "Đã xảy ra lỗi", layout: false });
         }
     }
+    static async logout(req, res) {
+        res.clearCookie("access_token", { httpOnly: true, secure: false, sameSite: 'lax' });
+        res.clearCookie("refresh_token", { httpOnly: true, secure: false, sameSite: 'lax' });
+        return res.redirect("/auth/login");
+    }
     static async login(req, res) {
         const { username, password } = req.body;
         try {

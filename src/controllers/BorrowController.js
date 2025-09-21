@@ -1,4 +1,4 @@
-const { Borrow, Book, User } = require("../models");
+const { Borrow, Book, User, Fine } = require("../models");
 
 class BorrowController {
     // Hiển thị danh sách phiếu mượn
@@ -110,9 +110,12 @@ class BorrowController {
             include: [
                 { model: Book, as: 'book' },
                 { model: User, as: 'borrower' },
-                { model: User, as: 'approver' }
+                { model: User, as: 'approver' },
+                { model: Fine, as: 'fine' },
             ]
         });
+        console.log(borrow);
+        
         if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
 
         res.render("borrow/librarian/detail", { title: "Chi tiết phiếu mượn", borrow });
