@@ -114,7 +114,7 @@ class BorrowController {
                 { model: Fine, as: 'fine' },
             ]
         });
-        console.log(borrow);
+        // console.log(borrow);
         
         if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
 

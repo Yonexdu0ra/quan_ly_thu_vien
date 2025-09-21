@@ -1,4 +1,4 @@
-const { Fine, Borrow} = require("../models");
+const { Fine, Borrow, Book, User } = require("../models");
 
 
 const FineController = {
@@ -7,9 +7,21 @@ const FineController = {
     try {
       const fines = await Fine.findAll({
         include: {
-            model: Borrow,
-            as: 'borrow'
-        }, // nếu bạn có liên kết Fine.belongsTo(Borrow)
+          model: Borrow,
+          as: 'borrow',
+          include: [
+            {
+              model: Book,
+              as: 'book',
+              attributes: ['title']
+            },
+            {
+              model: User,
+              as: 'borrower',
+              attributes: ['fullname']
+            }
+          ]
+        },
         order: [["createdAt", "DESC"]],
       });
       res.render("fine/index", { fines, title: "Quản lý fines" });
@@ -81,12 +93,24 @@ const FineController = {
     try {
       const fine = await Fine.findByPk(req.params.id, {
         include: {
-            model: Borrow,
-            as: 'borrow'
+          model: Borrow,
+          as: 'borrow',
+          include: [
+            {
+              model: Book,
+              as: 'book',
+              attributes: ['title']
+            },
+            {
+              model: User,
+              as: 'borrower',
+              attributes: ['fullname']
+            }
+          ]
         },
       });
-      console.log(fine);
-      
+      // console.log(fine);
+
       if (!fine) return res.status(404).send("Không tìm thấy fine");
       res.render("fine/detail", { fine, title: "Chi tiết fine" });
     } catch (error) {
@@ -95,28 +119,9 @@ const FineController = {
     }
   },
 
-  // Form confirm delete
-  delete: async (req, res) => {
-    try {
-      const fine = await Fine.findByPk(req.params.id);
-      if (!fine) return res.status(404).send("Không tìm thấy fine");
-      res.render("fine/delete", { fine });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Lỗi server");
-    }
-  },
 
-  // Xử lý delete fine
-  deletePost: async (req, res) => {
-    try {
-      await Fine.destroy({ where: { id: req.params.id } });
-      res.redirect("/fines");
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Lỗi server");
-    }
-  },
+
+
 };
 
 module.exports = FineController;

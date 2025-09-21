@@ -1,6 +1,6 @@
 <body class="container mt-4">
   <h1 class="mb-3">Danh sách Phiếu Phạt</h1>
-  <a href="/fines/add" class="btn btn-primary mb-3">Thêm Phiếu Phạt</a>
+  <!-- <a href="/fines/add" class="btn btn-primary mb-3">Thêm Phiếu Phạt</a> -->
 
   <table class="table table-bordered table-hover">
     <thead>
@@ -8,8 +8,9 @@
         <th>ID</th>
         <th>Số tiền</th>
         <th>Trạng thái</th>
-        <th>Borrow ID</th>
         <th>Ngày tạo</th>
+        <th>Ngày người mượn</th>
+        <th>Sách</th>
         <th>Hành động</th>
       </tr>
     </thead>
@@ -19,12 +20,12 @@
           <td><%= fine.id %></td>
           <td><%= fine.amount %> ₫</td>
           <td><%= fine.isPaid ? "Đã trả" : "Chưa trả" %></td>
-          <td><%= fine.borrow_id %></td>
           <td><%= fine.createdAt.toLocaleDateString() %></td>
+          <td><%= fine.borrow.borrower.fullname %></td>
+          <td><%= fine.borrow.book.title %></td>
           <td>
             <a href="/fines/<%= fine.id %>" class="btn btn-sm btn-info">Chi tiết</a>
-            <a href="/fines/edit/<%= fine.id %>" class="btn btn-sm btn-warning">Sửa</a>
-            <a href="/fines/delete/<%= fine.id %>" class="btn btn-sm btn-danger">Xóa</a>
+            <a href="/fines/edit/<%= fine.id %>" class="btn btn-sm btn-warning">Cập nhật</a>
           </td>
         </tr>
       <% }) %>
