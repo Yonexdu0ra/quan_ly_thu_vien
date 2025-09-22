@@ -10,3 +10,4 @@ coverage/
 .vscode/ 
 src/ssl/*
 package-lock.json
+seeders

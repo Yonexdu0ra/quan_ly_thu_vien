@@ -1,4 +1,5 @@
 const { Author } = require("../models");
+const AuthorRepository = require("../repositories/authorRepository");
 
 
 
@@ -6,7 +7,7 @@ class AuthorService {
 
     static async getAllAuthors() {
         try {
-            const authors = await Author.findAll({});
+            const authors = await AuthorRepository.findAll();
             return authors;
         } catch (error) {
             return [];
@@ -14,7 +15,10 @@ class AuthorService {
     }
     static async getAuthorById(id) {
         try {
-            const author = await Author.findByPk(id);
+            const author = await AuthorRepository.findById(id);
+            if (!author) {
+                throw new Error("Tác giả không tồn tại");
+            }
             return author;
         } catch (error) {
             return null;
@@ -22,7 +26,11 @@ class AuthorService {
     }
     static async createAuthor(authorData) {
         try {
-            const newAuthor = await Author.create(authorData);
+            const newAuthor = await AuthorRepository.create({
+                ...authorData
+            }, {
+                fields: ['name']
+            });
             return newAuthor;
         } catch (error) {
             throw error;
@@ -30,30 +38,32 @@ class AuthorService {
     }
     static async updateAuthor(id, authorData) {
         try {
-            const author = await Author.findByPk(id);
+            const author = await AuthorRepository.findById(id);
             if (!author) {
-                return null;
+                throw new Error("Tác giả không tồn tại");
             }
-            await author.update(authorData);
-            return author;
+            const updatedAuthor = await AuthorRepository.update(id, {
+                name: authorData.name
+            });
+            return updatedAuthor;
         } catch (error) {
             throw error;
         }
     }
     static async deleteAuthor(id) {
         try {
-            const author = await Author.findByPk(id);
+            const author = await AuthorRepository.findById(id);
             if (!author) {
-                return null;
+                throw new Error("Tác giả không tồn tại");
             }
-            await author.destroy();
+            await AuthorRepository.delete(id);
             return author;
         }
         catch (error) {
             throw error;
         }
     }
-    
+
 }
 
 module.exports = AuthorService;

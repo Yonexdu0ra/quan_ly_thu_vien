@@ -6,7 +6,7 @@ class ReportController {
       const totalBooks = await Book.count();
       const totalAuthors = await Author.count();
       const totalCategories = await Category.count();
-      const totalBorrows = await Borrow.count();
+      const totalBorrows = await Borrow.findAndCountAll();
       const totalAccounts = await Account.count();
       const totalFines = await Fine.count();
 

@@ -6,15 +6,15 @@ const borrowRoute = require("./borrowRoute");
 const accountRoute = require("./accountRoute");
 const fineRoute = require("./fineRoute");
 const reportRoute = require("./reportRoute");
-const { requiredRoleAdmin, requiredRoleLibraries } = require('../middleware/authorization')
+const { requiredRoleAdmin, requiredRoleLibraries, requiredRoleReaderOrLibrarian, requireRoleLibrarianOrAdmin } = require('../middleware/authorization')
 const routes = (app) => {
     app.use("/auth", authRoute);
-    app.use("/categories", requiredRoleLibraries, categoryRoute);
-    app.use("/authors", requiredRoleLibraries, authorRoute);
-    app.use("/books", requiredRoleLibraries, bookRoute);
+    app.use("/categories", requireRoleLibrarianOrAdmin, categoryRoute);
+    app.use("/authors", requireRoleLibrarianOrAdmin, authorRoute);
+    app.use("/books", requireRoleLibrarianOrAdmin, bookRoute);
     app.use("/borrows", borrowRoute);
     app.use("/accounts", requiredRoleAdmin, accountRoute);
-    app.use("/fines", requiredRoleLibraries, fineRoute);
+    app.use("/fines", requireRoleLibrarianOrAdmin, fineRoute);
     app.use("/reports", requiredRoleAdmin, reportRoute);
 };
 

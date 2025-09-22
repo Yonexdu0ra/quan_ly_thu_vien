@@ -1,15 +1,17 @@
-const { Account, User } = require("../models");
-
+const bcrypt = require("bcrypt");
+const { Account, User, sequelize } = require("../models");
 
 
 class AccountService {
 
-    static async getAllAccounts() {
+    static async getAllAccounts(search, sortBy, sortOrder, page = 1, pageSize = 10) {
         try {
-            const accounts = await Account.findAll();
+            const accounts = await Account.findAndCountAll();
             return accounts;
         } catch (error) {
-            return [];
+            return {
+                count: 0, rows: []
+            };
         }
     }
     static async getAccountById(id) {
@@ -20,23 +22,52 @@ class AccountService {
             return null;
         }
     }
-    static async createAccount(accountData) {
+    static async createAccount(data) {
+        const transaction = await sequelize.transaction();
         try {
-            const newAccount = await Account.create(accountData);
-            return newAccount;
+            const user = await User.create({
+                fullname: data.fullname,
+                email: data.email,
+                phone: data.phone,
+                address: data.address,
+            }, { transaction });
+
+            const account = await Account.create({
+                username: data.username,
+                password: await bcrypt.hash(data.password, 10),
+                role: data.role,
+                userId: user.id
+            }, { transaction });
+
+            await transaction.commit();
+            return {
+                account: account,
+                user: user
+            }
         } catch (error) {
+            await transaction.rollback();
             throw error;
         }
     }
     static async updateAccount(id, accountData) {
+        const transaction = await sequelize.transaction();
         try {
-            const account = await Account.findByPk(id);
+            const account = await Account.findByPk(id, {
+                include: [{ model: User, as: 'user' }]
+            });
             if (!account) {
-                return null;
+                throw new Error("Tài khoản không tồn tại");
             }
-            await account.update(accountData);
+            await account.update({
+                ...accountData,
+            }, { fields: ['role'], transaction });
+            await account.user.update({
+                ...accountData,
+            }, { fields: ['fullname', 'email', 'phone', 'address'], transaction });
+            await transaction.commit();
             return account;
         } catch (error) {
+            await transaction.rollback();
             throw error;
         }
     }
@@ -44,7 +75,7 @@ class AccountService {
         try {
             const account = await Account.findByPk(id);
             if (!account) {
-                return null;
+                throw new Error("Tài khoản không tồn tại");
             }
             await account.destroy();
             return account;
@@ -54,7 +85,7 @@ class AccountService {
     }
     static async getAccountByUsername(username) {
         try {
-            const account = await Account.findOne({ where: { username },  include: [{ model: User, as: 'user' ,attributes: ['fullname']}] });
+            const account = await Account.findOne({ where: { username }, include: [{ model: User, as: 'user', attributes: ['fullname'] }] });
             return account;
         } catch (error) {
             return null;

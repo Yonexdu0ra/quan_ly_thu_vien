@@ -1,11 +1,12 @@
 const { Author } = require("../models");
+const AuthorService = require("../services/AuthorService");
 
 
 
 
 class AuthController {
     static async index(req, res) {
-        const authors = await Author.findAll();
+        const authors = await AuthorService.getAllAuthors();
         res.render("author/index", {
             title: "Quản lý tác giả", authors
         });
@@ -15,7 +16,7 @@ class AuthController {
     }
     static async edit(req, res) {
         const authorId = req.params.id;
-        const author = await Author.findByPk(authorId);
+        const author = await AuthorService.getAuthorById(authorId);
         if (!author) {
             return res.status(404).send("Tác giả không tồn tại");
         }
@@ -23,7 +24,7 @@ class AuthController {
     }
     static async delete(req, res) {
         const authorId = req.params.id;
-        const author = await Author.findByPk(authorId);
+        const author = await AuthorService.getAuthorById(authorId);
         if (!author) {
             return res.status(404).send("Tác giả không tồn tại");
         }
@@ -39,28 +40,26 @@ class AuthController {
     }
     static async addPost(req, res) {
         const { name, bio } = req.body;
-        await Author.create({ name, bio });
+        await AuthorService.createAuthor({ name, bio });
         res.redirect("/authors");
     }
     static async editPost(req, res) {
         const authorId = req.params.id;
         const { name, bio } = req.body;
-        const author = await Author.findByPk(authorId);
+        const author = await AuthorService.getAuthorById(authorId);
         if (!author) {
             return res.status(404).send("Tác giả không tồn tại");
         }
-        author.name = name;
-        author.bio = bio;
-        await author.save();
+        await AuthorService.updateAuthor(authorId, { name, bio });
         res.redirect("/authors");
     }
     static async deletePost(req, res) {
         const authorId = req.params.id;
-        const author = await Author.findByPk(authorId);
+        const author = await AuthorService.getAuthorById(authorId);
         if (!author) {
             return res.status(404).send("Tác giả không tồn tại");
         }
-        await author.destroy();
+        await AuthorService.deleteAuthor(authorId);
         res.redirect("/authors");
     }
 }

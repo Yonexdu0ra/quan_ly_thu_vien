@@ -1,53 +1,133 @@
-<div class="container my-4">
-    <h1 class="mb-4">📊 Báo cáo thống kê</h1>
-    <div class="row mb-4">
-        <div class="col-md-2">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Tổng sách</h5>
-                    <p class="fs-4 fw-bold"><%= totalBooks %></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Tác giả</h5>
-                    <p class="fs-4 fw-bold"><%= totalAuthors %></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Danh mục</h5>
-                    <p class="fs-4 fw-bold"><%= totalCategories %></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Lượt mượn</h5>
-                    <p class="fs-4 fw-bold"><%= totalBorrows %></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Tài khoản</h5>
-                    <p class="fs-4 fw-bold"><%= totalAccounts %></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Tiền phạt</h5>
-                    <p class="fs-4 fw-bold text-danger"><%= totalFines %></p>
-                </div>
-            </div>
-        </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>   
+<h1 class="mb-4">📊 Báo cáo thống kê</h1>
+
+<!-- Cards tổng quan -->
+<div class="row mb-4">
+  <div class="col-md-2">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Tổng sách</h5>
+        <p class="fs-4 fw-bold"><%= totalBooks %></p>
+      </div>
     </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Tác giả</h5>
+        <p class="fs-4 fw-bold"><%= totalAuthors %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Danh mục</h5>
+        <p class="fs-4 fw-bold"><%= totalCategories %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Lượt mượn</h5>
+        <p class="fs-4 fw-bold"><%= totalBorrows.count %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Tài khoản</h5>
+        <p class="fs-4 fw-bold"><%= totalAccounts %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card text-center shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Tiền phạt</h5>
+        <p class="fs-4 fw-bold text-danger"><%= totalFines %></p>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- Charts -->
+<div class="row">
+  <div class="col-md-6">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">📊 Phân bổ dữ liệu</h5>
+        <canvas id="pieChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">📈 So sánh tổng quan</h5>
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  <!-- const totalBooks = <%= totalBooks %>; -->
+  console.log("1");
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const totalBooks = <%- JSON.stringify(totalBooks) %>;
+    const totalAuthors = <%- JSON.stringify(totalAuthors) %>;
+    const totalCategories = <%- JSON.stringify(totalCategories) %>;
+    const totalBorrows = <%- JSON.stringify(totalBorrows.count) %>;
+    const totalAccounts = <%- JSON.stringify(totalAccounts) %>;
+    const totalFines = <%- JSON.stringify(totalFines) %>;
+
+    const borrowStatus = <%- JSON.stringify(borrowStatus) %>;
+    const borrows = <%- JSON.stringify(totalBorrows.rows) %>;
+    const dangYeuCauMon = borrows.filter(b => b.status === 'Đang yêu cầu mượn').length;
+    const daDuyet = borrows.filter(b => b.status === 'Đã duyệt, chờ lấy').length;
+    const dangMuon = borrows.filter(b => b.status === 'Đang mượn').length;
+    const daTra = borrows.filter(b => b.status === 'Đã trả').length
+    const quaHan = borrows.filter(b => b.status === 'Quá hạn').length;
+    const daHuy = borrows.filter(b => b.status === 'Đã hủy').length;
+    const tuChoi = borrows.filter(b => b.status === 'Từ chối').length;
+    const ctxPie = document.getElementById("pieChart");
+    new Chart(ctxPie, {
+      type: "pie",
+      data: {
+        labels: [...borrowStatus],
+        datasets: [{
+          data: [dangYeuCauMon, daDuyet, tuChoi, dangMuon, daTra, quaHan, daHuy],
+          backgroundColor: [
+            "#0d6efd", "#198754", "#dc3545", "#ffc107", "#6c757d", "#fd7e14", "#6610f2"
+          ],
+        }],
+      },
+    });
+    
+    const ctxBar = document.getElementById("barChart");
+    new Chart(ctxBar, {
+      type: "bar",
+      data: {
+        labels: ["Sách", "Tác giả", "Danh mục", "Mượn", "Tài khoản", "Phạt"],
+        datasets: [{
+          label: "Số lượng",
+          data: [totalBooks, totalAuthors, totalCategories, totalBorrows, totalAccounts, totalFines],
+          backgroundColor: "#0d6efd",
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } },
+      },
+    });
+  });
+</script>
+

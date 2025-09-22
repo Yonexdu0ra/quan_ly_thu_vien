@@ -12,14 +12,21 @@ class BookRepository {
   }
 
   static async findById(id) {
-    return Book.findByPk(id, {
-      include: [
-        { model: Author, as: "author" },
-        { model: Category, as: "category" }
-      ]
-    });
+    return Book.findByPk(id);
   }
-
+  static async findByIdWithAuthorAndCategory(id) {
+    try {
+      const book = await Book.findByPk(id, {
+        include: [
+          { model: Author, as: "author" },
+          { model: Category, as: "category" }
+        ]
+      })
+      return book
+    } catch (error) {
+      return null
+    }
+  }
   static async findByISBN(isbn) {
     return Book.findOne({ where: { isbn } });
   }

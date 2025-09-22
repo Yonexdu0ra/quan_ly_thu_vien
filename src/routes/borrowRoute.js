@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const router = Router();
 const BorrowController = require("../controllers/BorrowController");
-const { requiredRoleLibraries } = require("../middleware/authorization");
+const { requireRoleLibrarianOrAdmin } = require("../middleware/authorization");
 
 router.get("/reader", BorrowController.indexReader);
 router.get("/reader/add", BorrowController.addReader);
@@ -14,12 +14,12 @@ router.post("/reader/add", BorrowController.addReaderPost);
 router.post("/reader/cancel/:id", BorrowController.deleteReaderPost);
 
 
-router.get("/librarian", requiredRoleLibraries, BorrowController.indexLibrarian);
-router.get("/librarian/edit/:id", requiredRoleLibraries, BorrowController.updateLibrarian);
-router.get("/librarian/detail/:id", requiredRoleLibraries, BorrowController.detailLibrarian);
-router.get("/librarian/approve/:id", requiredRoleLibraries, BorrowController.acceptBorrowPost);
-router.get("/librarian/reject/:id", requiredRoleLibraries, BorrowController.rejectBorrowPost);
-router.get("/librarian/expire/:id", requiredRoleLibraries, BorrowController.markAsExpiredPost);
-router.post("/librarian/edit/:id", requiredRoleLibraries, BorrowController.updateLibrarianPost);
+router.get("/librarian", requireRoleLibrarianOrAdmin, BorrowController.indexLibrarian);
+router.get("/librarian/edit/:id", requireRoleLibrarianOrAdmin, BorrowController.updateLibrarian);
+router.get("/librarian/detail/:id", requireRoleLibrarianOrAdmin, BorrowController.detailLibrarian);
+router.get("/librarian/approve/:id", requireRoleLibrarianOrAdmin, BorrowController.acceptBorrowPost);
+router.get("/librarian/reject/:id", requireRoleLibrarianOrAdmin, BorrowController.rejectBorrowPost);
+router.get("/librarian/expire/:id", requireRoleLibrarianOrAdmin, BorrowController.markAsExpiredPost);
+router.post("/librarian/edit/:id", requireRoleLibrarianOrAdmin, BorrowController.updateLibrarianPost);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const { Account } = require("../models");
+const { Account, User } = require("../models");
 
 class AccountRepository {
   static async findAll(options = {}) {
@@ -8,9 +8,20 @@ class AccountRepository {
   static async findById(id) {
     return Account.findByPk(id);
   }
-
-  static async findByUsername(username) {
-    return Account.findOne({ where: { username } });
+  static async findByIdWithUser(id) {
+    return Account.findByPk(id, { include: { model: User, as: 'user' } });
+  }
+  static async findByUsernameWithUser(username) {
+    return Account.findOne({
+      where: { username }, include: {
+        model: User, as: 'user'
+      }
+    });
+  }
+  static async findByUsernamer(username) {
+    return Account.findOne({
+      where: { username }
+    });
   }
 
   static async create(data) {

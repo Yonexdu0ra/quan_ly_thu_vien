@@ -1,10 +1,9 @@
-const { Book } = require("../models")
+const { Book, Author, Category } = require("../models")
 
 
 
 
 class BookService {
-
     static async getAllBooks() {
         try {
             const books = await Book.findAll({})
@@ -21,7 +20,19 @@ class BookService {
             return null
         }
     }
-
+    async getBookByIdWithAuthorAndCategory(id) {
+        try {
+            const book = await Book.findByPk(id, {
+                include: [
+                    { model: Author, as: "author" },
+                    { model: Category, as: "category" }
+                ]
+            })
+            return book
+        } catch (error) {
+            return null
+        }
+    }
     static async createBook(bookData) {
         try {
             const newBook = await Book.create(bookData)
