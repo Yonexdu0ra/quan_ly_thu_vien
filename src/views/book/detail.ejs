@@ -19,4 +19,11 @@
   <img src="<%= book.image_cover %>" alt="Cover" class="img-fluid my-3" />
 </div>
 
-<a href="/books" class="btn btn-secondary">Quay lại</a>
+<% if(book.quantity_available < 1) { %>
+<div class="alert alert-warning" role="alert">
+  Hiện tại sách đã hết, vui lòng quay lại sau!
+</div>
+<% } %> <% if(role === 'Reader' && book.quantity_available > 0) { %>
+<a href="/borrows/reader/add?book_id=<%= book.id %>" class="btn btn-primary">Mượn sách</a>
+<% } %>
+<button onclick="window.navigation.back()" class="btn btn-secondary">Quay lại</button>

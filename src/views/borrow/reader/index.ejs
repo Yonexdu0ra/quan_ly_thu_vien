@@ -1,5 +1,5 @@
 <h1 class="mb-4">Danh sách phiếu mượn</h1>
-<a href="/borrows/add" class="btn btn-primary mb-3">Thêm phiếu mượn</a>
+<a href="/borrows/reader/add" class="btn btn-primary mb-3">Thêm phiếu mượn</a>
 
 <table class="table table-striped table-hover">
   <thead>
@@ -33,13 +33,15 @@
       </td>
       <td><%= b.status %></td>
       <td>
-        <a href="/borrows/detail/<%= b.id %>" class="btn btn-info btn-sm"
+        <a href="/borrows/reader/detail/<%= b.id %>" class="btn btn-info btn-sm"
           >Xem chi tiết</a
         >
-        <a
+       <% if(b.status === 'Đang yêu cầu mượn') { %> 
+         <a
           href="/borrows/reader/cancel/<%= b.id %>"
           class="btn btn-danger btn-sm"
           >Hủy</a
+          <% } %>
         >
       </td>
     </tr>

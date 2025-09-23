@@ -3,21 +3,23 @@ const { Book, Author, Category, Borrow, Account, Fine } = require("../models");
 class ReportController {
   static async index(req, res) {
     try {
-      const totalBooks = await Book.count();
-      const totalAuthors = await Author.count();
-      const totalCategories = await Category.count();
-      const totalBorrows = await Borrow.findAndCountAll();
-      const totalAccounts = await Account.count();
-      const totalFines = await Fine.count();
+      const books = await Book.findAndCountAll();
+      const authors = await Author.findAndCountAll();
+      const categories = await Category.findAndCountAll({});
+      const borrows = await Borrow.findAndCountAll({
+         attributes: ['status']
+      });
+      const accounts = await Account.findAndCountAll();
+      const fines = await Fine.findAndCountAll();
 
       res.render("report/index", {
         title: "Báo cáo tổng quan",
-        totalBooks,
-        totalAuthors,
-        totalCategories,
-        totalBorrows,
-        totalAccounts,
-        totalFines
+        books,
+        authors,
+        categories,
+        borrows,
+        accounts,
+        fines
       });
     } catch (error) {
       console.error(error);

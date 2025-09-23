@@ -11,10 +11,10 @@ const routes = (app) => {
     app.use("/auth", authRoute);
     app.use("/categories", requireRoleLibrarianOrAdmin, categoryRoute);
     app.use("/authors", requireRoleLibrarianOrAdmin, authorRoute);
-    app.use("/books", requireRoleLibrarianOrAdmin, bookRoute);
+    app.use("/books", bookRoute);
     app.use("/borrows", borrowRoute);
     app.use("/accounts", requiredRoleAdmin, accountRoute);
-    app.use("/fines", requireRoleLibrarianOrAdmin, fineRoute);
+    app.use("/fines", fineRoute);
     app.use("/reports", requiredRoleAdmin, reportRoute);
 };
 

@@ -7,7 +7,7 @@
     <div class="card text-center shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Tổng sách</h5>
-        <p class="fs-4 fw-bold"><%= totalBooks %></p>
+        <p class="fs-4 fw-bold"><%= books.count %></p>
       </div>
     </div>
   </div>
@@ -15,7 +15,7 @@
     <div class="card text-center shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Tác giả</h5>
-        <p class="fs-4 fw-bold"><%= totalAuthors %></p>
+        <p class="fs-4 fw-bold"><%= authors.count %></p>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@
     <div class="card text-center shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Danh mục</h5>
-        <p class="fs-4 fw-bold"><%= totalCategories %></p>
+        <p class="fs-4 fw-bold"><%= categories.count %></p>
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@
     <div class="card text-center shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Lượt mượn</h5>
-        <p class="fs-4 fw-bold"><%= totalBorrows.count %></p>
+        <p class="fs-4 fw-bold"><%= borrows.count %></p>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
     <div class="card text-center shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Tài khoản</h5>
-        <p class="fs-4 fw-bold"><%= totalAccounts %></p>
+        <p class="fs-4 fw-bold"><%= accounts.count %></p>
       </div>
     </div>
   </div>
@@ -47,7 +47,7 @@
     <div class="card text-center shadow-sm">
       <div class="card-body">
         <h5 class="card-title">Tiền phạt</h5>
-        <p class="fs-4 fw-bold text-danger"><%= totalFines %></p>
+        <p class="fs-4 fw-bold text-danger"><%= fines.count %></p>
       </div>
     </div>
   </div>
@@ -58,7 +58,7 @@
   <div class="col-md-6">
     <div class="card shadow-sm mb-4">
       <div class="card-body">
-        <h5 class="card-title">📊 Phân bổ dữ liệu</h5>
+        <h5 class="card-title">📊 Mượn/trả</h5>
         <canvas id="pieChart"></canvas>
       </div>
     </div>
@@ -74,22 +74,19 @@
   </div>
 </div>
 
-<script>
-  <!-- const totalBooks = <%= totalBooks %>; -->
-  console.log("1");
-</script>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const totalBooks = <%- JSON.stringify(totalBooks) %>;
-    const totalAuthors = <%- JSON.stringify(totalAuthors) %>;
-    const totalCategories = <%- JSON.stringify(totalCategories) %>;
-    const totalBorrows = <%- JSON.stringify(totalBorrows.count) %>;
-    const totalAccounts = <%- JSON.stringify(totalAccounts) %>;
-    const totalFines = <%- JSON.stringify(totalFines) %>;
+    const totalBooks = <%- books.count %>;
+    const totalAuthors = <%- authors.count %>;
+    const totalCategories = <%- categories.count %>;
+    const totalBorrows = <%- borrows.count %>;
+    const totalAccounts = <%- accounts.count %>;
+    const totalFines = <%- fines.count %>
 
     const borrowStatus = <%- JSON.stringify(borrowStatus) %>;
-    const borrows = <%- JSON.stringify(totalBorrows.rows) %>;
+    const borrows = <%- JSON.stringify(borrows.rows) %>;
     const dangYeuCauMon = borrows.filter(b => b.status === 'Đang yêu cầu mượn').length;
     const daDuyet = borrows.filter(b => b.status === 'Đã duyệt, chờ lấy').length;
     const dangMuon = borrows.filter(b => b.status === 'Đang mượn').length;

@@ -12,8 +12,8 @@ class AuthService {
             if (!account) {
                 throw new Error("Tài khoản không tồn tại");
             }
-            // const isPasswordValid = await bcrypt.compare(password, account.password);
-            const isPasswordValid = password === account.password;
+            const isPasswordValid = await bcrypt.compare(password, account.password);
+            // const isPasswordValid = password === account.password;
             if (!isPasswordValid) {
                 throw new Error("Mật khẩu không đúng");
             }

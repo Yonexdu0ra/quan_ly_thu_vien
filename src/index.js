@@ -5,7 +5,8 @@ const { sequelize, User, Account, Category, Author, Book } = require("./models")
 const routes = require("./routes");
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
-
+const bcrypt = require("bcrypt");
+const BookService = require("./services/BookService");
 
 
 const app = express();
@@ -34,8 +35,11 @@ app.use((req, res, next) => {
 
 routes(app);
 
-app.get("/", (req, res) => {
-    res.render("index", { title: "Trang chủ" });
+app.get("/",async (req, res) => {
+    const books =await  BookService.getAllBooks();
+    // console.log(books);
+    
+    res.render("index", { title: "Trang chủ", books });
 });
 
 (async () => {
@@ -65,7 +69,7 @@ app.get("/", (req, res) => {
         //     isbn: "1234567890123",
         //     quantity_total: 10,
         //     quantity_available: 10,
-        //     image_cover: "https://nads.1cdn.vn/2024/11/22/74da3f39-759b-4f08-8850-4c8f2937e81a-1_mangeshdes.png"
+        //     image_cover: "https://res.cloudinary.com/quydepteai/image/upload/v1758428702/books/unnyc8zypd4fuenc0pss.png"
         // })
         // await Book.create({
         //     title: "Tuổi thơ dữ dội",
@@ -75,7 +79,7 @@ app.get("/", (req, res) => {
         //     isbn: "1234567890124",
         //     quantity_total: 5,
         //     quantity_available: 5,
-        //     image_cover: "https://nads.1cdn.vn/2024/11/22/74da3f39-759b-4f08-8850-4c8f2937e81a-1_mangeshdes.png"
+        //     image_cover: "https://res.cloudinary.com/quydepteai/image/upload/v1758428783/books/ywjzxysb8n0oyfdgtxir.png"
         // })
 
         // const user = await User.create({
@@ -87,7 +91,7 @@ app.get("/", (req, res) => {
 
         // const account = await Account.create({
         //     username: "admin",
-        //     password: "admin123",
+        //     password: await bcrypt.hash("admin123", 10),
         //     role: "admin",
         //     user_id: user.id
         // })
@@ -102,7 +106,7 @@ app.get("/", (req, res) => {
         // })
         // const account2 = await Account.create({
         //     username: "nmcuong",
-        //     password: "123456",
+        //     password: await bcrypt.hash("123456", 10),
         //     role: "Librarian",
         //     user_id: user2.id
         // })
@@ -114,7 +118,7 @@ app.get("/", (req, res) => {
         // })
         // const account3 = await Account.create({
         //     username: "dungos",
-        //     password: "123456",
+        //     password: await bcrypt.hash("123456", 10),
         //     role: "Reader",
         //     user_id: user3.id
         // })

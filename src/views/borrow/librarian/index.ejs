@@ -38,6 +38,13 @@
           class="btn btn-info btn-sm"
           >Xem chi tiết</a
         >
+        <% if(b.status === "Đã duyệt, chờ lấy") { %>
+        <a
+          href="/borrows/librarian/pickup/<%= b.id %>"
+          class="btn btn-success btn-sm"
+          >Xác nhận lấy sách</a
+        >
+        <% }  %>
         <% if(b.status === "Đang yêu cầu mượn") { %>
         <a
           href="/borrows/librarian/approve/<%= b.id %>"

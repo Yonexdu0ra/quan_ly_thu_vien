@@ -1,12 +1,20 @@
-const { Book, Author, Category } = require("../models")
 
+const BookRepository = require("../repositories/BookRepository")
 
 
 
 class BookService {
-    static async getAllBooks() {
+    static async getAllBooksWithAuthorAndCategory() {
         try {
-            const books = await Book.findAll({})
+            const books = await BookRepository.findAllWithAuthorAndCategor({})
+            return books
+        } catch (error) {
+            return []
+        }
+    }
+    static getAllBooks() {
+        try {
+            const books = BookRepository.fidnAll({})
             return books
         } catch (error) {
             return []
@@ -14,28 +22,32 @@ class BookService {
     }
     static async getBookById(id) {
         try {
-            const book = await Book.findByPk(id)
+            const book = await BookRepository.findById(id)
+            if (!book) {
+                throw new Error("Book not found")
+            }
             return book
         } catch (error) {
-            return null
+            throw error
         }
     }
     async getBookByIdWithAuthorAndCategory(id) {
         try {
-            const book = await Book.findByPk(id, {
-                include: [
-                    { model: Author, as: "author" },
-                    { model: Category, as: "category" }
-                ]
-            })
+            const book = await BookRepository.findByIdWithAuthorAndCategory(id)
+            if (!book) {
+                throw new Error("Book not found")
+            }
             return book
         } catch (error) {
-            return null
+            throw error
         }
     }
     static async createBook(bookData) {
         try {
-            const newBook = await Book.create(bookData)
+            if(bookData.quantity_total < bookData.quantity_available) {
+                throw new Error("Số lượng có sẵn không được lớn hơn tổng số lượng")
+            }
+            const newBook = await BookRepository.create(bookData)
             return newBook
         } catch (error) {
             throw error
@@ -43,9 +55,12 @@ class BookService {
     }
     static async updateBook(id, bookData) {
         try {
-            const book = await Book.findByPk(id)
+            if(bookData.quantity_total < bookData.quantity_available) {
+                throw new Error("Số lượng có sẵn không được lớn hơn tổng số lượng")
+            }
+            const book = await BookRepository.findById(id)
             if (!book) {
-                return null
+                throw new Error("Book not found")
             }
             await book.update(bookData)
             return book
@@ -56,11 +71,11 @@ class BookService {
     }
     static async deleteBook(id) {
         try {
-            const book = await Book.findByPk(id)
+            const book = await BookRepository.findById(id)
             if (!book) {
-                return null
+                throw new Error("Book not found")
             }
-            await book.destroy()
+            await BookRepository.delete(id)
             return book
         } catch (error) {
             throw error

@@ -5,10 +5,11 @@
         <label for="book_id" class="form-label">Sách</label>
         <select name="book_id" id="book_id" class="form-select" required>
             <option value="">-- Chọn sách --</option>
-            <% books.forEach(book => { %>
-                <option value="<%= book.id %>"><%= book.title %></option>
+           <% books.forEach(book => { %>
+                <option value="<%= book.id %>" <%= book.id == book_id ? "selected" : "" %>><%= book.title %></option>
             <% }) %>
         </select>
+        
     </div>
 <!-- 
     <div class="mb-3">

@@ -2,6 +2,9 @@ const { Borrow, Book, User, Fine } = require("../models");
 
 class BorrowRepository {
   static async findAll(options = {}) {
+    return Borrow.findAll(options);
+  }
+  static async findAllWithUserAndBookAndFine(options = {}) {
     return Borrow.findAll({
       include: [
         { model: Book, as: "book" },
@@ -12,8 +15,10 @@ class BorrowRepository {
       ...options
     });
   }
-
   static async findById(id) {
+    return Borrow.findByPk(id);
+  }
+  static async findByIdWithUserAndBookAndFine(id) {
     return Borrow.findByPk(id, {
       include: [
         { model: Book, as: "book" },

@@ -1,5 +1,4 @@
 const AccountService = require("../services/AccountService");
-const { encodeJWT } = require("../utils/jwt");
 const authService = require("../services/AuthService");
 
 
