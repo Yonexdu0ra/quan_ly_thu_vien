@@ -1,7 +1,7 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
-const { sequelize, User, Account, Category, Author, Book } = require("./models");
+const { sequelize, User, Account, Category, Author, Book, Borrow } = require("./models");
 const routes = require("./routes");
 const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
@@ -34,6 +34,13 @@ app.use((req, res, next) => {
 });
 
 routes(app);
+
+app.get('/not-found', (req, res) => {
+    res.status(404).render('notFound', { title: 'Không tìm thấy trang' });
+});
+app.get('/forbidden', (req, res) => {
+    res.status(403).render('forbidden', { title: 'Không có quyền truy cập' });
+});
 
 app.get("/",async (req, res) => {
     const books =await  BookService.getAllBooks();
@@ -125,6 +132,8 @@ app.get("/",async (req, res) => {
         // console.log(user2);
 
         // console.log(account);
+        
+        
         console.log("Kết nối tới MySQL thành công.");
     } catch (error) {
         console.error("Không thể kết nối tới MySQL:", error);
@@ -132,6 +141,6 @@ app.get("/",async (req, res) => {
 })();
 
 
-app.listen(3000, () => {
-    console.log("Server is running on http://localhost:3000");
+app.listen(3003, () => {
+    console.log("Server is running on http://localhost:3003");
 });

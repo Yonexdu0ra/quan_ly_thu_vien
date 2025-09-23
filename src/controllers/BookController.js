@@ -46,32 +46,65 @@ class BookController {
         res.render("book/detail", { title: "Chi tiết sách", book });
     }
     static async addPost(req, res) {
-        const { title, author_id, category_id, published_year, isbn, quantity_total, quantity_available } = req.body;
+        try {
+            const {
+              title,
+              author_id,
+              category_id,
+              published_year,
+              isbn,
+              quantity_total,
+              quantity_available,
+              description,
+            } = req.body;
 
-        const image_cover = req.file.path; // console.log(req.body);
-        if (quantity_total < quantity_available) {
-            return res.status(400).send("Số lượng có sẵn không thể lớn hơn tổng số lượng");
+            const image_cover = req.file.path;
+            if (quantity_total < quantity_available) {
+              return res
+                .status(400)
+                .send("Số lượng có sẵn không thể lớn hơn tổng số lượng");
+            }
+
+            const book = await Book.create({
+              title,
+              author_id,
+              category_id,
+              published_year,
+              isbn,
+              quantity_total,
+              quantity_available,
+              image_cover,
+              description,
+            });
+
+            res.redirect("/books");
+        } catch (error) {
+            return res.render('/books/add', { title: "Thêm sách", error: error.message });
         }
-
-        const book = await Book.create({ title, author_id, category_id, published_year, isbn, quantity_total, quantity_available, image_cover });
-
-
-        res.redirect("/books");
     }
     static async editPost(req, res) {
         const bookId = req.params.id;
-        const { title, author_id, category_id, published_year, isbn, quantity_total, quantity_available } = req.body;
+        const {
+          title,
+          author_id,
+          category_id,
+          published_year,
+          isbn,
+          quantity_total,
+          quantity_available,
+          description,
+        } = req.body;
         if (quantity_total < quantity_available) {
             return res.status(400).send("Số lượng có sẵn không thể lớn hơn tổng số lượng");
         }
         // console.log(req.file);
         // console.log(req.files);
         
-        const image_cover = req.file.path;
         const book = await Book.findByPk(bookId);
         if (!book) {
             return res.status(404).send("Sách không tồn tại");
         }
+        const image_cover = req.file?.path ? req.file.path : book.image_cover;
         book.title = title;
         book.author_id = author_id;
         book.category_id = category_id;
@@ -79,7 +112,8 @@ class BookController {
         book.isbn = isbn;
         book.quantity_total = quantity_total;
         book.quantity_available = quantity_available;
-        book.image_cover = image_cover
+        book.image_cover = image_cover;
+        book.description = description;
         await book.save();
         res.redirect("/books");
     }

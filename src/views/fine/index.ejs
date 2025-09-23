@@ -1,6 +1,10 @@
 <h1 class="mb-3">Danh sách Phiếu Phạt</h1>
 <!-- <a href="/fines/add" class="btn btn-primary mb-3">Thêm Phiếu Phạt</a> -->
 
+<form action="">
+  <input type="text" class="form-control" placeholder="Tìm kiếm phiếu phạt..." name="search" value="<%= typeof search !== 'undefined' ? search : '' %>"/>
+  <button class="btn btn-outline-secondary mt-2" type="submit">Tìm kiếm</button>
+</form>
 <table class="table table-bordered table-hover">
   <thead>
     <tr>
@@ -35,3 +39,8 @@
     <% }) %>
   </tbody>
 </table>
+<div class="d-flex justify-content-center gap-4 align-items-center mt-3">
+    <span class="btn btn-primary">trang trước</span>
+    <span>1 / 2</span>
+    <span class="btn btn-primary">trang sau</span>
+  </div>

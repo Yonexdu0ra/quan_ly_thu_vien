@@ -5,35 +5,48 @@ class AccountRepository {
     return Account.findAll(options);
   }
 
-  static async findById(id) {
-    return Account.findByPk(id);
+  static async findById(id, options = {}) {
+    return Account.findByPk(id, options);
   }
-  static async findByIdWithUser(id) {
-    return Account.findByPk(id, { include: { model: User, as: 'user' } });
-  }
-  static async findByUsernameWithUser(username) {
-    return Account.findOne({
-      where: { username }, include: {
-        model: User, as: 'user'
-      }
-    });
-  }
-  static async findByUsernamer(username) {
-    return Account.findOne({
-      where: { username }
+
+  static async findByIdWithUser(id, options = {}) {
+    return Account.findByPk(id, {
+      include: { model: User, as: "user" },
+      ...options,
     });
   }
 
-  static async create(data) {
-    return Account.create(data);
+  static async findByUsernameWithUser(username, options = {}) {
+    return Account.findOne({
+      where: { username },
+      include: { model: User, as: "user" },
+      ...options,
+    });
   }
 
-  static async update(id, data) {
-    return Account.update(data, { where: { id } });
+  static async findByUsername(username, options = {}) {
+    return Account.findOne({
+      where: { username },
+      ...options,
+    });
   }
 
-  static async delete(id) {
-    return Account.destroy({ where: { id } });
+  static async create(data, options = {}) {
+    return Account.create(data, options);
+  }
+
+  static async update(id, data, options = {}) {
+    return Account.update(data, {
+      where: { id },
+      ...options,
+    });
+  }
+
+  static async delete(id, options = {}) {
+    return Account.destroy({
+      where: { id },
+      ...options,
+    });
   }
 }
 

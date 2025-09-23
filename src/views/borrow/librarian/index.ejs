@@ -1,6 +1,9 @@
 <h1 class="mb-4">Danh sách phiếu mượn</h1>
 <!-- <a href="/borrows/add" class="btn btn-primary mb-3">Thêm phiếu mượn</a> -->
-
+<form action="">
+  <input type="text" class="form-control" placeholder="Tìm kiếm phiếu mượn..." name="search" value="<%= typeof search !== 'undefined' ? search : '' %>"/>
+  <button class="btn btn-outline-secondary mt-2" type="submit">Tìm kiếm</button>
+</form>
 <table class="table table-striped table-hover">
   <thead>
     <tr>
@@ -65,15 +68,27 @@
           >Đánh dấu quá hạn
          </a>
         <% }  %>
-        <% if(!["Đang yêu cầu mượn", "Từ chối", "Đã hủy"].includes(b.status)) { %>
+        <% if(b.status === "Đang mượn" || b.status === "Quá hạn") { %>
+            <a
+          href="/borrows/librarian/return/<%= b.id %>"
+          class="btn btn-success btn-sm"
+          >Đã trả
+         </a>
+        <% }  %>
+        <!-- <% if(!["Đang yêu cầu mượn", "Từ chối", "Đã hủy"].includes(b.status)) { %>
         <a
           href="/borrows/librarian/edit/<%= b.id %>"
           class="btn btn-warning btn-sm"
           >Cập nhật phiếu mượn</a
         >
-        <% } %>
+        <% } %> -->
       </td>
     </tr>
     <% }) %>
   </tbody>
 </table>
+<div class="d-flex justify-content-center gap-4 align-items-center mt-3">
+    <span class="btn btn-primary">trang trước</span>
+    <span>1 / 2</span>
+    <span class="btn btn-primary">trang sau</span>
+  </div>

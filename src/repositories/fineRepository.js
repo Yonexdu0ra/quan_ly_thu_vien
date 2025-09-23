@@ -4,26 +4,33 @@ class FineRepository {
   static async findAll(options = {}) {
     return Fine.findAll({
       include: [{ model: Borrow, as: "borrow" }],
-      ...options
+      ...options,
     });
   }
 
-  static async findById(id) {
+  static async findById(id, options = {}) {
     return Fine.findByPk(id, {
-      include: [{ model: Borrow, as: "borrow" }]
+      include: [{ model: Borrow, as: "borrow" }],
+      ...options,
     });
   }
 
-  static async create(data) {
-    return Fine.create(data);
+  static async create(data, options = {}) {
+    return Fine.create(data, options);
   }
 
-  static async update(id, data) {
-    return Fine.update(data, { where: { id } });
+  static async update(id, data, options = {}) {
+    return Fine.update(data, {
+      where: { id },
+      ...options,
+    });
   }
 
-  static async delete(id) {
-    return Fine.destroy({ where: { id } });
+  static async delete(id, options = {}) {
+    return Fine.destroy({
+      where: { id },
+      ...options,
+    });
   }
 }
 

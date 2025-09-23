@@ -1,26 +1,53 @@
 const { Fine, Borrow, Book, User } = require("../models");
 
-
 const FineController = {
   // Hiển thị danh sách fines
   index: async (req, res) => {
+    const role = req.role;
+    const userId = req.user.user_id;
     try {
+      if(role === "Reader") {
+        const fines = await Fine.findAll({
+          where: {
+            borrow_id: userId
+          },
+          include: {
+            model: Borrow,
+            as: "borrow",
+            include: [
+              {
+                model: Book,
+                as: "book",
+                attributes: ["title"],
+              },
+              {
+                model: User,
+                as: "borrower",
+                attributes: ["fullname"],
+              },
+            ],
+          },
+          order: [["createdAt", "DESC"]],
+        });
+          
+        
+      }
       const fines = await Fine.findAll({
         include: {
           model: Borrow,
-          as: 'borrow',
+          as: "borrow",
           include: [
             {
               model: Book,
-              as: 'book',
-              attributes: ['title']
+              as: "book",
+              attributes: ["title"],
             },
             {
               model: User,
-              as: 'borrower',
-              attributes: ['fullname']
-            }
-          ]
+              as: "borrower",
+              attributes: ["fullname"],
+            },
+          ],
         },
         order: [["createdAt", "DESC"]],
       });
@@ -94,19 +121,19 @@ const FineController = {
       const fine = await Fine.findByPk(req.params.id, {
         include: {
           model: Borrow,
-          as: 'borrow',
+          as: "borrow",
           include: [
             {
               model: Book,
-              as: 'book',
-              attributes: ['title']
+              as: "book",
+              attributes: ["title"],
             },
             {
               model: User,
-              as: 'borrower',
-              attributes: ['fullname']
-            }
-          ]
+              as: "borrower",
+              attributes: ["fullname"],
+            },
+          ],
         },
       });
       // console.log(fine);
@@ -118,10 +145,6 @@ const FineController = {
       res.status(500).send("Lỗi server");
     }
   },
-
-
-
-
 };
 
 module.exports = FineController;

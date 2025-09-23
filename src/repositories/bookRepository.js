@@ -1,40 +1,36 @@
 const { Book, Author, Category } = require("../models");
 
 class BookRepository {
-  static async findAllWithAuthorAndCategor(options = {}) {
+  static async findAllWithAuthorAndCategory(options = {}) {
     return Book.findAll({
       include: [
         { model: Author, as: "author" },
-        { model: Category, as: "category" }
+        { model: Category, as: "category" },
       ],
-      ...options
+      ...options,
     });
   }
-  static async fidnAll(options = {}) {
-    return Book.findAll(options);
-  }
+
   static async findAll(options = {}) {
     return Book.findAll(options);
   }
 
-  static async findById(id) {
-    return Book.findByPk(id);
+  static async findById(id, options = {}) {
+    return Book.findByPk(id, options);
   }
-  static async findByIdWithAuthorAndCategory(id) {
-    try {
-      const book = await Book.findByPk(id, {
-        include: [
-          { model: Author, as: "author" },
-          { model: Category, as: "category" }
-        ]
-      })
-      return book
-    } catch (error) {
-      return null
-    }
+
+  static async findByIdWithAuthorAndCategory(id, options = {}) {
+    return Book.findByPk(id, {
+      include: [
+        { model: Author, as: "author" },
+        { model: Category, as: "category" },
+      ],
+      ...options,
+    });
   }
-  static async findByISBN(isbn) {
-    return Book.findOne({ where: { isbn } });
+
+  static async findByISBN(isbn, options = {}) {
+    return Book.findOne({ where: { isbn }, ...options });
   }
 
   static async create(data, options = {}) {
@@ -42,11 +38,17 @@ class BookRepository {
   }
 
   static async update(id, data, options = {}) {
-    return Book.update(data, { where: { id } }, options);
+    return Book.update(data, {
+      where: { id },
+      ...options,
+    });
   }
 
   static async delete(id, options = {}) {
-    return Book.destroy({ where: { id },  }, options);
+    return Book.destroy({
+      where: { id },
+      ...options,
+    });
   }
 }
 

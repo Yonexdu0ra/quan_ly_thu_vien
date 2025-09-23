@@ -5,24 +5,30 @@ class UserRepository {
     return User.findAll(options);
   }
 
-  static async findById(id) {
-    return User.findByPk(id);
+  static async findById(id, options = {}) {
+    return User.findByPk(id, options);
   }
 
-  static async findByEmail(email) {
-    return User.findOne({ where: { email } });
+  static async findByEmail(email, options = {}) {
+    return User.findOne({ where: { email }, ...options });
   }
 
-  static async create(data) {
-    return User.create(data);
+  static async create(data, options = {}) {
+    return User.create(data, options);
   }
 
-  static async update(id, data) {
-    return User.update(data, { where: { id } });
+  static async update(id, data, options = {}) {
+    return User.update(data, {
+      where: { id },
+      ...options,
+    });
   }
 
-  static async delete(id) {
-    return User.destroy({ where: { id } });
+  static async delete(id, options = {}) {
+    return User.destroy({
+      where: { id },
+      ...options,
+    });
   }
 }
 

@@ -14,7 +14,7 @@ class BookService {
     }
     static getAllBooks() {
         try {
-            const books = BookRepository.fidnAll({})
+            const books = BookRepository.findAll({})
             return books
         } catch (error) {
             return []
