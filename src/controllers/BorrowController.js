@@ -52,8 +52,8 @@ class BorrowController {
       const borrowId = req.params.id;
       const borrow = await BorrowService.getBorrowById(borrowId);
 
-      const books = await Book.findAll();
-      const users = await User.findAll();
+      const { rows: books } = await BookService.getAllBooks();
+      const { rows: users } = await UserService.getAllUsers();
 
       return res.render("borrow/reader/edit", {
         title: "Chỉnh sửa phiếu mượn",
@@ -145,14 +145,9 @@ class BorrowController {
 
   static async detailLibrarian(req, res) {
     const borrowId = req.params.id;
-    const borrow = await Borrow.findByPk(borrowId, {
-      include: [
-        { model: Book, as: "book" },
-        { model: User, as: "borrower" },
-        { model: User, as: "approver" },
-        { model: Fine, as: "fine" },
-      ],
-    });
+    const borrow = await BorrowService.getBorrowByIdWithUserAndBookAndFine(
+      borrowId
+    );
     // console.log(borrow);
 
     if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
@@ -167,13 +162,9 @@ class BorrowController {
     const approver_id = req.user.user_id;
     const borrowId = req.params.id;
     // const { status, return_date, pickup_date } = req.body;
-    const borrow = await Borrow.findByPk(borrowId, {
-      include: [
-        { model: Book, as: "book" },
-        { model: User, as: "borrower" },
-        { model: User, as: "approver" },
-      ],
-    });
+    const borrow = await BorrowService.getBorrowByIdWithUserAndBookAndFine(
+      borrowId
+    );
     if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
     // await borrow.update({ status, return_date, pickup_date, approver_id });
     return res.render("borrow/librarian/update", {
@@ -200,8 +191,8 @@ class BorrowController {
     const approver_id = req.user.user_id;
     const borrowId = req.params.id;
     // const { status, return_date, pickup_date } = req.body;
-    const borrow = await Borrow.findByPk(borrowId);
-    if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+    // const borrow = await Borrow.findByPk(borrowId);
+    // if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
     await BorrowService.markAsApproved(borrow.id, {
       approver_id,
     });
@@ -228,7 +219,7 @@ class BorrowController {
         amount: 5000,
         isPaid: false,
         borrow_id: borrow.id,
-        user_id: borrow.approver_id,
+        // user_id: borrow.approver_id,
       });
     }
     await BorrowService.markAsExpired(borrow.id);

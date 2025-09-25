@@ -36,8 +36,8 @@ Borrow.hasOne(Fine, { foreignKey: "borrow_id", as: "fine" });
 Fine.belongsTo(Borrow, { foreignKey: "borrow_id", as: "borrow" });
 
 // User - Fine: 1-N
-User.hasMany(Fine, { foreignKey: "user_id", as: "fines" });
-Fine.belongsTo(User, { foreignKey: "user_id", as: "user" });
+// User.hasMany(Fine, { foreignKey: "user_id", as: "fines" });
+// Fine.belongsTo(User, { foreignKey: "user_id", as: "user" });
 
 module.exports = {
     User,

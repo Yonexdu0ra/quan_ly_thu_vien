@@ -59,7 +59,7 @@ class BorrowService {
       const borrow = await BorrowRepository.findByIdWithUserAndBookAndFine(id);
       return borrow;
     } catch (error) {
-      return null;
+      throw new Error("Phiếu mượn không tồn tại");
     }
   }
   static async getBorrowById(id) {
@@ -67,7 +67,7 @@ class BorrowService {
       const borrow = await BorrowRepository.findById(id);
       return borrow;
     } catch (error) {
-      return null;
+      throw new Error("Phiếu mượn không tồn tại");
     }
   }
   static async createBorrow(borrowData) {
@@ -94,7 +94,7 @@ class BorrowService {
         throw new Error("Sách đã hết, vui lòng chọn sách khác");
       const borrow = await BorrowRepository.findById(id);
       if (!borrow) {
-        return null;
+        throw new Error("Phiếu mượn không tồn tại");
       }
       await borrow.update(borrowData);
       return borrow;
@@ -106,7 +106,7 @@ class BorrowService {
     try {
       const borrow = await Borrow.findByPk(id);
       if (!borrow) {
-        return null;
+        throw new Error("Phiếu mượn không tồn tại");
       }
       await borrow.destroy();
       return borrow;
@@ -119,7 +119,7 @@ class BorrowService {
     try {
       const borrow = await BorrowRepository.findById(id);
       if (!borrow) {
-        return null;
+        throw new Error("Phiếu mượn không tồn tại");
       }
       if (
         borrow.status !== BORROW_STATUS_CONSTANTS.BORROWED &&
@@ -153,7 +153,7 @@ class BorrowService {
     try {
       const borrow = await BorrowRepository.findById(id);
       if (!borrow) {
-        return null;
+        throw new Error("Phiếu mượn không tồn tại");
       }
       if (
         borrow.status !== BORROW_STATUS_CONSTANTS.REQUESTED &&
@@ -196,7 +196,7 @@ class BorrowService {
     try {
       const borrow = await BorrowRepository.findById(id);
       if (!borrow) {
-        return null;
+        throw new Error("Phiếu mượn không tồn tại");
       }
       
       if (borrow.status !== BORROW_STATUS_CONSTANTS.REQUESTED) {
@@ -220,7 +220,7 @@ class BorrowService {
     try {
       const borrow = await BorrowRepository.findById(id);
       if (!borrow) {
-        return null;
+        throw new Error("Phiếu mượn không tồn tại");
       }
       if (borrow.status !== BORROW_STATUS_CONSTANTS.REQUESTED) {
         throw new Error("Chỉ có thể từ chối yêu cầu mượn đang chờ duyệt");
@@ -257,7 +257,7 @@ class BorrowService {
     try {
       const borrow = await BorrowRepository.findById(id);
       if (!borrow) {
-        return null;
+        throw new Error("Phiếu mượn không tồn tại");
       }
       if (borrow.status !== BORROW_STATUS_CONSTANTS.APPROVED) {
         throw new Error("Chỉ có thể xác nhận lấy sách đã được duyệt");
@@ -277,7 +277,7 @@ class BorrowService {
     try {
       const borrow = await BorrowRepository.findById(id);
       if (!borrow) {
-        return null;
+        throw new Error("Phiếu mượn không tồn tại");
       }
       if (borrow.status !== BORROW_STATUS_CONSTANTS.BORROWED) {
         throw new Error("Chỉ có thể đánh dấu quá hạn cho các mượn đang mượn");

@@ -1,4 +1,4 @@
-const { Book, Author, Category } = require("../models");
+
 const BookService = require("../services/BookService");
 const AuthorService = require("../services/AuthorService");
 const CategoryService = require("../services/CategoryService");

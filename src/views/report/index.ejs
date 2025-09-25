@@ -85,14 +85,14 @@
     const totalAccounts = <%- accounts.count %>;
     const totalFines = <%- fines.count %>
 
-    const borrowStatus = <%- JSON.stringify(borrowStatus) %>;
+    const borrowStatus = <%- JSON.stringify(borrowStatus.map(x => x[1])) %>;
     const borrows = <%- JSON.stringify(borrows.rows) %>;
-    const dangYeuCauMon = borrows.filter(b => b.status === 'Đang yêu cầu mượn').length;
-    const daDuyet = borrows.filter(b => b.status === 'Đã duyệt, chờ lấy').length;
-    const dangMuon = borrows.filter(b => b.status === 'Đang mượn').length;
-    const daTra = borrows.filter(b => b.status === 'Đã trả').length
-    const quaHan = borrows.filter(b => b.status === 'Quá hạn').length;
-    const daHuy = borrows.filter(b => b.status === 'Đã hủy').length;
+    const dangYeuCauMon = borrows.filter(b => b.status === "<%= borrowStatusConstants.REQUESTED %>").length;
+    const daDuyet = borrows.filter(b => b.status === "<%= borrowStatusConstants.APPROVED %>").length;
+    const dangMuon = borrows.filter(b => b.status === "<%= borrowStatusConstants.BORROWED %>").length;
+    const daTra = borrows.filter(b => b.status === "<%= borrowStatusConstants.RETURNED %>").length;
+    const quaHan = borrows.filter(b => b.status === "<%= borrowStatusConstants.EXPIRED %>").length;
+    const daHuy = borrows.filter(b => b.status === "<%= borrowStatusConstants.CANCELLED %>").length;
     const tuChoi = borrows.filter(b => b.status === 'Từ chối').length;
     const ctxPie = document.getElementById("pieChart");
     new Chart(ctxPie, {

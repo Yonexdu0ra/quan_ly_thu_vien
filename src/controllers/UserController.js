@@ -3,8 +3,13 @@ const UserService = require("../services/UserService");
 class UserController {
 
     static async index(req, res) {
-        const users = await UserService.getAllUsers();
-        return res.render("user/index", { title: "Quản lý người dùng", users });
+      const { search, sort, page, limit } = req.query;
+        const { count, rows: users } = await UserService.getAllUsers({ search, sort, page, limit });
+        // console.log(users);
+        
+        const currentPage = parseInt(page) || 1;
+        const totalPages = Math.ceil(count / limit) || 1;
+        return res.render("user/index", { title: "Quản lý người dùng", users, totalPages, page: currentPage, query: req.query });
     }
 
     static async edit(req, res) {

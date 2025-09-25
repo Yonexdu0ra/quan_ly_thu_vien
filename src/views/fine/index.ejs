@@ -2,7 +2,7 @@
 <!-- <a href="/fines/add" class="btn btn-primary mb-3">Thêm Phiếu Phạt</a> -->
 
 <form action="">
-  <div>
+  <div class="d-flex gap-2 flex-row">
     <input
       type="text"
       class="form-control"
@@ -12,17 +12,17 @@
     />
     <select class="form-select" name="sort" id="">
       <option value="">Sắp xếp theo</option>
-      <option value="amount-ASC" <%= sort === 'amount-ASC' ? 'selected' : '' %>>Số tiền tăng dần</option>
-      <option value="amount-DESC" <%= sort === 'amount-DESC' ? 'selected' : '' %>>Số tiền giảm dần</option>
-      <option value="isPaid-ASC" <%= sort === 'isPaid-ASC' ? 'selected' : '' %>>Trạng thái chưa trả</option>
-      <option value="isPaid-DESC" <%= sort === 'isPaid-DESC' ? 'selected' : '' %>>Trạng thái đã trả</option>
+      <option value="amount-ASC" <%= query.sort === 'amount-ASC' ? 'selected' : '' %>>Số tiền tăng dần</option>
+      <option value="amount-DESC" <%= query.sort === 'amount-DESC' ? 'selected' : '' %>>Số tiền giảm dần</option>
+      <option value="isPaid-ASC" <%= query.sort === 'isPaid-ASC' ? 'selected' : '' %>>Trạng thái chưa trả</option>
+      <option value="isPaid-DESC" <%= query.sort === 'isPaid-DESC' ? 'selected' : '' %>>Trạng thái đã trả</option>
 
     </select>
   </div>
   <button class="btn btn-primary my-2" type="submit">Tìm kiếm</button>
 </form>
-<table class="table table-bordered table-hover">
-  <thead>
+<table class="table table-bordered table-hover table-striped ">
+  <thead class="table-dark">
     <tr>
       <th>ID</th>
       <th>Số tiền</th>
@@ -55,7 +55,7 @@
     <% }) %>
   </tbody>
 </table>
-<!-- <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
+<div class="d-flex justify-content-center gap-4 align-items-center mt-3">
     <a
       class="btn btn-primary"
       <%= page <= 1 ? "hidden" : "" %>
@@ -69,4 +69,4 @@
       href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
       >trang sau</a
     >
-  </div> -->
+  </div>

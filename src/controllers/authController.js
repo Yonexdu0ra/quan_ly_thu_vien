@@ -1,5 +1,5 @@
 const AccountService = require("../services/AccountService");
-const authService = require("../services/AuthService");
+const AuthService = require("../services/AuthService");
 
 
 class AuthController {
@@ -11,7 +11,7 @@ class AuthController {
         }
     }
     static async logout(req, res) {
-        await authService.logout();
+        await AuthService.logout();
         res.clearCookie("access_token", { httpOnly: true, secure: false, sameSite: 'lax' });
         res.clearCookie("refresh_token", { httpOnly: true, secure: false, sameSite: 'lax' });
         return res.redirect("/auth/login");
@@ -19,7 +19,7 @@ class AuthController {
     static async login(req, res) {
         const { username, password } = req.body;
         try {
-            const { access_token, refresh_token } = await authService.login(username, password);
+            const { access_token, refresh_token } = await AuthService.login(username, password);
             const TIME_COOKIE_EXPIRE = 7 * 24 * 60 * 60 * 1000;
             res.cookie("access_token", access_token, { httpOnly: true, maxAge: TIME_COOKIE_EXPIRE, secure: false, sameSite: 'lax' });
             res.cookie("refresh_token", refresh_token, { httpOnly: true, maxAge: TIME_COOKIE_EXPIRE, secure: false, sameSite: 'lax' });
@@ -35,7 +35,7 @@ class AuthController {
         const accountId = req.user.id;
         const { currentPassword, newPassword, confirmPassword } = req.body;
         try {
-            await authService.changePassword(accountId, currentPassword, newPassword, confirmPassword);
+            await AuthService.changePassword(accountId, currentPassword, newPassword, confirmPassword);
             return res.render("changePassword", { title: "Đổi mật khẩu", success: "Đổi mật khẩu thành công" });
         } catch (error) {
             return res.status(500).render("changePassword", { title: "Đổi mật khẩu", error: error.message });

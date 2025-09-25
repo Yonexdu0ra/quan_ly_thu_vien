@@ -2,16 +2,27 @@
   <h1 class="mb-4">Danh sách người dùng</h1>
 
   <form class="mb-3" method="GET" action="/users">
-    <div class="input-group">
+    <div class="d-flex flex-row gap-2">
       <input
         type="text"
         name="search"
         class="form-control"
         placeholder="Tìm kiếm người dùng..."
-        value="<%= typeof search !== 'undefined' ? search : '' %>"
+        value="<%= query.search %>"
       />
-      <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+      <select class="form-select" name="sort" id="">
+        <option value="DESC" <%= query.sort === 'DESC' ? 'selected' : '' %>>
+         Người dùng mới nhất
+        </option>
+        <option value="ASC" <%= query.sort === 'ASC' ? 'selected' : '' %>>
+         Người dùng cũ nhất
+        </option>
+        <option value="ASC">
+         Người dùng cũ nhất
+        </option>
+      </select>
     </div>
+    <button class="btn btn-primary my-2" type="submit">Tìm kiếm</button>
   </form>
   <% if (users && users.length > 0) { %>
   <table class="table table-bordered table-striped align-middle">
@@ -49,8 +60,18 @@
   <div class="alert alert-info">Không có người dùng nào.</div>
   <% } %>
   <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
-    <span class="btn btn-primary">trang trước</span>
-    <span>1 / 2</span>
-    <span class="btn btn-primary">trang sau</span>
+    <a
+      class="btn btn-primary"
+      <%= page <= 1 ? "hidden" : "" %>
+      href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang trước</a
+    >
+    <span><%= page %> / <%= totalPages %></span>
+    <a
+      class="btn btn-primary"
+      <%= page >= totalPages ? "hidden" : "" %>
+      href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang sau</a
+    >
   </div>
 </div>

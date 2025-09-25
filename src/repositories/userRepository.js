@@ -1,8 +1,26 @@
+const { Op } = require("sequelize");
 const { User } = require("../models");
 
 class UserRepository {
-  static async findAll(options = {}) {
-    return User.findAll(options);
+  static async findAll({ search = "", sortBy = "createdAt", order = "ASC", page = 1, limit = 5 }, options = {}) {
+    const where = {};
+    const orderOptions = [];
+    if (search) {
+      where.fullname = {
+        [Op.like]: `%${search}%`,
+      };
+    }
+    if (sortBy) {
+      orderOptions.push([sortBy, order]);
+    }
+
+    return User.findAndCountAll({
+      where,
+      order: orderOptions,
+      limit,
+      offset: (page - 1) * limit,
+      ...options,
+    });
   }
 
   static async findById(id, options = {}) {

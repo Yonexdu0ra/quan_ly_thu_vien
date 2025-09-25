@@ -1,96 +1,88 @@
 const bcrypt = require("bcrypt");
 const { Account, User, sequelize } = require("../models");
-
+const AccountRepository = require("../repositories/AccountRepository");
 
 class AccountService {
 
-    static async getAllAccounts(search, sortBy, sortOrder, page = 1, pageSize = 10) {
+    static async getAllAccounts(search, sort, page = 1, pageSize = 10) {
         try {
-            const accounts = await Account.findAndCountAll();
-            return accounts;
+            const sortBy = "createdAt";
+            const order = sort === "ASC" ? "ASC" : "DESC";
+            const account = await AccountRepository.findAll({ search, sortBy, order, page, pageSize });
+            return account;
         } catch (error) {
+            console.log(error.message);
+
             return {
                 count: 0, rows: []
             };
         }
     }
+    static async getAccountByIdWithUser(id) {
+        return await AccountRepository.findByIdWithUser(id);
+    }
     static async getAccountById(id) {
         try {
-            const account = await Account.findByPk(id);
+            const account = await AccountRepository.findById(id);
+            if (!account) {
+                throw new Error("Tài khoản không tồn tại");
+            }
             return account;
         } catch (error) {
-            return null;
+            console.log(error.message);
+            throw error;
         }
     }
-    static async createAccount(data) {
-        const transaction = await sequelize.transaction();
+    static async createAccount(data, options = {}) {
         try {
-            const user = await User.create({
-                fullname: data.fullname,
-                email: data.email,
-                phone: data.phone,
-                address: data.address,
-            }, { transaction });
 
-            const account = await Account.create({
+            const account = await AccountRepository.create({
                 username: data.username,
                 password: await bcrypt.hash(data.password, 10),
                 role: data.role,
                 userId: user.id
-            }, { transaction });
+            }, { ...options });
 
-            await transaction.commit();
-            return {
-                account: account,
-                user: user
-            }
+
+            return account
         } catch (error) {
-            await transaction.rollback();
             throw error;
         }
     }
-    static async updateAccount(id, accountData) {
-        const transaction = await sequelize.transaction();
+    static async updateAccount(id, accountData, options = {}) {
         try {
-            const account = await Account.findByPk(id, {
-                include: [{ model: User, as: 'user' }]
-            });
+            const account = await AccountRepository.findById(id);
             if (!account) {
                 throw new Error("Tài khoản không tồn tại");
             }
-            await account.update({
-                ...accountData,
-            }, { fields: ['role'], transaction });
-            await account.user.update({
-                ...accountData,
-            }, { fields: ['fullname', 'email', 'phone', 'address'], transaction });
-            await transaction.commit();
+            await AccountRepository.update(id, accountData, options);
             return account;
         } catch (error) {
-            await transaction.rollback();
             throw error;
         }
     }
-    static async deleteAccount(id) {
+    static async deleteAccount(id, options = {}) {
         try {
-            const account = await Account.findByPk(id);
+            const account = await AccountRepository.findById(id);
             if (!account) {
                 throw new Error("Tài khoản không tồn tại");
             }
-            await account.destroy();
-            return account;
+            return await AccountRepository.delete(id, options);
+
         } catch (error) {
             throw error;
         }
     }
     static async getAccountByUsername(username) {
         try {
-            const account = await Account.findOne({ where: { username }, include: [{ model: User, as: 'user', attributes: ['fullname'] }] });
+            const account = await AccountRepository.findByUsername(username);
+
             return account;
         } catch (error) {
-            return null;
+            throw null;
         }
     }
+
 }
 
 module.exports = AccountService;    
