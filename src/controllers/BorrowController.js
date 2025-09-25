@@ -2,12 +2,31 @@ const { Borrow, Book, User, Fine } = require("../models");
 const BorrowService = require("../services/BorrowService");
 const BookService = require("../services/BookService");
 const UserService = require("../services/UserService");
+const FineService = require("../services/FineService");
 class BorrowController {
   // Hiển thị danh sách phiếu mượn
   static async indexReader(req, res) {
+    const { search, sort, page = 1, limit = 5 } = req.query;
+    // lấy ra danh sách phiếu mượn của riêng user đang đăng nhập
     const user_id = req.user.user_id;
-    const borrows = await BorrowService.getAllBorrowsWithUserAndBookAndFine();
-    res.render("borrow/reader/index", { title: "Quản lý phiếu mượn", borrows });
+    const { count, rows } =
+      await BorrowService.getAllBorrowsWithUserAndBookAndFineByUserId(user_id, {
+        search,
+        sort,
+        page,
+        limit,
+      });
+    const total = count;
+    const totalPages = Math.ceil(total / limit) || 1;
+    const currentPage = parseInt(page) || 1;
+
+    res.render(`borrow/reader/index`, {
+      title: "Quản lý phiếu mượn",
+      borrows: rows || [],
+      totalPages,
+      page: currentPage,
+      query: req.query,
+    });
   }
 
   // Hiển thị form thêm phiếu mượn
@@ -15,61 +34,57 @@ class BorrowController {
     const book_id = req.query.book_id;
     // console.log(book_id);
 
-    const books = await BookService.getAllBooks();
-    const users = await UserService.getAllUsers();
-    res.render("borrow/reader/add", {
+    const { rows: books } = await BookService.getAllBooks();
+    const { rows: users } = await UserService.getAllUsers();
+    return res.render("borrow/reader/add", {
       title: "Thêm phiếu mượn",
       books,
       users,
       book_id,
       oldData: {},
-      error: ""
+      error: "",
     });
   }
 
   // Hiển thị form chỉnh sửa phiếu mượn
   static async editReader(req, res) {
-    const borrowId = req.params.id;
-    const borrow = await Borrow.findByPk(borrowId);
-    if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+    try {
+      const borrowId = req.params.id;
+      const borrow = await BorrowService.getBorrowById(borrowId);
 
-    const books = await Book.findAll();
-    const users = await User.findAll();
+      const books = await Book.findAll();
+      const users = await User.findAll();
 
-    res.render("borrow/reader/edit", {
-      title: "Chỉnh sửa phiếu mượn",
-      borrow,
-      books,
-      users,
-    });
+      return res.render("borrow/reader/edit", {
+        title: "Chỉnh sửa phiếu mượn",
+        borrow,
+        books,
+        users,
+      });
+    } catch (error) {
+      return res.redirect("/not-found");
+    }
   }
 
   // Hiển thị form xóa phiếu mượn
-  static async deleteReader(req, res) {
+  static async viewMarkAsCancelled(req, res) {
     const borrowId = req.params.id;
-    const borrow = await Borrow.findByPk(borrowId, {
-      include: [
-        { model: Book, as: "book" },
-        { model: User, as: "borrower" },
-        { model: User, as: "approver" },
-      ],
-    });
-    if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+    const borrow = await BorrowService.getBorrowByIdWithUserAndBookAndFine(
+      borrowId
+    );
 
-    res.render("borrow/reader/delete", { title: "Xóa phiếu mượn", borrow });
+    return res.render("borrow/reader/delete", {
+      title: "Hủy phiếu mượn",
+      borrow,
+    });
   }
 
   // Hiển thị chi tiết phiếu mượn
   static async detailReader(req, res) {
     const borrowId = req.params.id;
-    const borrow = await Borrow.findByPk(borrowId, {
-      include: [
-        { model: Book, as: "book" },
-        { model: User, as: "borrower" },
-        { model: User, as: "approver" },
-      ],
-    });
-    if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
+    const borrow = await BorrowService.getBorrowByIdWithUserAndBookAndFine(
+      borrowId
+    );
 
     res.render("borrow/reader/detail", {
       title: "Chi tiết phiếu mượn",
@@ -93,44 +108,38 @@ class BorrowController {
       return res.redirect("/borrows/reader");
     } catch (error) {
       // console.log(error.message);
-      const book = await BookService.getAllBooks();
-      const users = await UserService.getAllUsers();
+      const { rows: books } = await BookService.getAllBooks();
+      const { rows: users } = await UserService.getAllUsers();
       return res.render("borrow/reader/add", {
         title: "Thêm phiếu mượn",
         error: error.message,
-        books: book,
+        books,
         users,
         oldData: req.body,
         book_id: req.body.book_id,
-      })
+      });
     }
   }
 
-  // Xử lý POST hủy phiếu mượn
-  static async deleteReaderPost(req, res) {
-    const borrowId = req.params.id;
-    const borrow = await Borrow.findByPk(borrowId);
-    if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
-    if (borrow.status !== "Đang yêu cầu mượn") {
-      return res
-        .status(400)
-        .send("Chỉ có thể hủy phiếu mượn đang yêu cầu mượn");
-    }
-    await borrow.update({ status: "Đã hủy" });
-
-    res.redirect("/borrows/reader");
-  }
   static async indexLibrarian(req, res) {
-    const borrows = await Borrow.findAll({
-      include: [
-        { model: Book, as: "book" },
-        { model: User, as: "borrower" },
-        { model: User, as: "approver" },
-      ],
-    });
-    res.render("borrow/librarian/index", {
+    const { search, sort, page = 1, limit = 5 } = req.query;
+    const { count, rows } =
+      await BorrowService.getAllBorrowsWithUserAndBookAndFine({
+        search,
+        sort,
+        page,
+        limit,
+      });
+    const total = count;
+    const totalPages = Math.ceil(total / limit) || 1;
+    const currentPage = parseInt(page) || 1;
+
+    res.render(`borrow/librarian/index`, {
       title: "Quản lý phiếu mượn",
-      borrows,
+      borrows: rows || [],
+      totalPages,
+      page: currentPage,
+      query: req.query,
     });
   }
 
@@ -194,7 +203,6 @@ class BorrowController {
     const borrow = await Borrow.findByPk(borrowId);
     if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
     await BorrowService.markAsApproved(borrow.id, {
-      status: "Đã duyệt, chờ lấy",
       approver_id,
     });
     // await borrow.update({ status: "Đã duyệt, chờ lấy", approver_id });
@@ -204,27 +212,28 @@ class BorrowController {
   static async markAsRejectedPost(req, res) {
     const approver_id = req.user.user_id;
     const borrowId = req.params.id;
-    const borrow = await Borrow.findByPk(borrowId);
+    const borrow = await BorrowService.getBorrowById(borrowId);
     if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
     await BorrowService.markAsRejected(borrow.id, approver_id);
     res.redirect("/borrows/librarian");
   }
   static async markAsExpiredPost(req, res) {
-    const approver_id = req.user.user_id;
+    // const approver_id = req.user.user_id;
     const borrowId = req.params.id;
     // const { status, return_date, pickup_date } = req.body;
-    const borrow = await Borrow.findByPk(borrowId, {
-      include: {
-        model: Fine,
-        as: "fine",
-      },
-    });
+    const borrow = await BorrowService.getBorrowById(borrowId);
     if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
     if (!borrow.fine) {
-      await Fine.create({ amount: 50000, isPaid: false, borrow_id: borrow.id });
+      await FineService.createFine({
+        amount: 5000,
+        isPaid: false,
+        borrow_id: borrow.id,
+        user_id: borrow.approver_id,
+      });
     }
-    await borrow.update({ status: "Quá hạn", approver_id });
-    res.redirect("/borrows/librarian");
+    await BorrowService.markAsExpired(borrow.id);
+    // await borrow.update({ status: "Quá hạn", approver_id });
+    return res.redirect("/borrows/librarian");
   }
 
   static async markAsCancelled(req, res) {
@@ -233,35 +242,20 @@ class BorrowController {
       const borrow = await BorrowService.getBorrowById(borrow_id);
       if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
       await BorrowService.markAsCancelled(borrow.id);
-      res.redirect("/borrows/reader");
+      return res.redirect("/borrows/reader");
     } catch (error) {
-      res.status(500).send("Lỗi hệ thống");
+      return res.status(500).send("Lỗi hệ thống");
     }
   }
-  static async updateLibrarianPost(req, res) {
-    const approver_id = req.user.user_id;
-    const borrowId = req.params.id;
-    const { status, return_date = null, pickup_date = null } = req.body;
-    const borrow = await Borrow.findByPk(borrowId, {
-      include: [
-        { model: Book, as: "book" },
-        { model: User, as: "borrower" },
-        { model: User, as: "approver" },
-      ],
-    });
-    if (!borrow) return res.status(404).send("Phiếu mượn không tồn tại");
-    if (status === "Đã trả" && borrow.status !== "Đã trả") {
-      await borrow.book.update({
-        quantity_available: borrow.book.quantity_available + 1,
-      });
+  // Gia hạn ngày trả thêm 3 ngày
+  static async markAsRenewDueDate(req, res) {
+    try {
+      const borrow_id = req.params.id;
+      await BorrowService.markAsRenewDueDate(borrow_id);
+      return res.redirect("/borrows/librarian");
+    } catch (error) {
+      return res.status(500).send(error.message);
     }
-    await borrow.update({
-      status,
-      return_date,
-      pickup_date,
-      approver_id: borrow.approver_id ? borrow.approver_id : approver_id,
-    });
-    return res.redirect("/borrows/librarian");
   }
 }
 

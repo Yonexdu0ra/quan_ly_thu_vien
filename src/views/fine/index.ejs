@@ -2,8 +2,24 @@
 <!-- <a href="/fines/add" class="btn btn-primary mb-3">Thêm Phiếu Phạt</a> -->
 
 <form action="">
-  <input type="text" class="form-control" placeholder="Tìm kiếm phiếu phạt..." name="search" value="<%= typeof search !== 'undefined' ? search : '' %>"/>
-  <button class="btn btn-outline-secondary mt-2" type="submit">Tìm kiếm</button>
+  <div>
+    <input
+      type="text"
+      class="form-control"
+      name="search"
+      placeholder="Tìm kiếm theo tên người mượn hoặc tên sách"
+      value="<%= typeof search !== 'undefined' ? search : '' %>"
+    />
+    <select class="form-select" name="sort" id="">
+      <option value="">Sắp xếp theo</option>
+      <option value="amount-ASC" <%= sort === 'amount-ASC' ? 'selected' : '' %>>Số tiền tăng dần</option>
+      <option value="amount-DESC" <%= sort === 'amount-DESC' ? 'selected' : '' %>>Số tiền giảm dần</option>
+      <option value="isPaid-ASC" <%= sort === 'isPaid-ASC' ? 'selected' : '' %>>Trạng thái chưa trả</option>
+      <option value="isPaid-DESC" <%= sort === 'isPaid-DESC' ? 'selected' : '' %>>Trạng thái đã trả</option>
+
+    </select>
+  </div>
+  <button class="btn btn-primary my-2" type="submit">Tìm kiếm</button>
 </form>
 <table class="table table-bordered table-hover">
   <thead>
@@ -39,8 +55,18 @@
     <% }) %>
   </tbody>
 </table>
-<div class="d-flex justify-content-center gap-4 align-items-center mt-3">
-    <span class="btn btn-primary">trang trước</span>
-    <span>1 / 2</span>
-    <span class="btn btn-primary">trang sau</span>
-  </div>
+<!-- <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
+    <a
+      class="btn btn-primary"
+      <%= page <= 1 ? "hidden" : "" %>
+      href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang trước</a
+    >
+    <span><%= page %> / <%= totalPages %></span>
+    <a
+      class="btn btn-primary"
+      <%= page >= totalPages ? "hidden" : "" %>
+      href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang sau</a
+    >
+  </div> -->

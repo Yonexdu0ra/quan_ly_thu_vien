@@ -1,19 +1,53 @@
 <div class="container mt-5">
-    <h1 class="mb-4">Chi tiết tác giả</h1>
+  <h1 class="mb-4">Chi tiết tác giả</h1>
 
-    <div class="card">
-        <div class="card-header bg-primary text-white">
-            <h5><%= author.name %></h5>
-        </div>
-        <div class="card-body">
-            <p><strong>ID:</strong> <%= author.id %></p>
-            <p><strong>Tên tác giả:</strong> <%= author.name %></p>
-            <p><strong>Ngày tạo:</strong> <%= author.createdAt.toLocaleString() %></p>
-            <p><strong>Ngày cập nhật:</strong> <%= author.updatedAt.toLocaleString() %></p>
-        </div>
-        <div class="card-footer">
-            <a href="/authors" class="btn btn-secondary">Quay lại</a>
-        </div>
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h5><%= author.name %></h5>
     </div>
+    <div class="card-body">
+      <!-- <p><strong>ID:</strong> <%= author.id %></p> -->
+      <p><strong>Tên tác giả:</strong> <%= author.name %></p>
+      <p><strong>Tiểu sử:</strong> <%= author.bio %></p>
+    </div>
+    <div class="card-footer">
+      <a href="/authors" class="btn btn-secondary">Quay lại</a>
+    </div>
+  </div>
 
+  <!-- Danh sách sách -->
+  <div class="card">
+    <div class="card-header bg-success text-white">
+      <h5>Sách của tác giả</h5>
+    </div>
+    <div class="card-body">
+      <% if (author.books && author.books.length > 0) { %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <!-- <th>ID</th> -->
+              <th>Tiêu đề</th>
+              <th>ISBN</th>
+              <th>Năm XB</th>
+              <th>Số lượng có sẵn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% author.books.forEach(function(book) { %>
+              <tr>
+                <!-- <td><%= book.id %></td> -->
+                <td><a href="/books/<%= book.id %>"><%= book.title %></a></td>
+                <td><%= book.isbn %></td>
+                <td><%= book.published_year %></td>
+                <td><%= book.quantity_available %></td>
+                
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <p class="text-muted">Tác giả này chưa có sách nào.</p>
+      <% } %>
+    </div>
+  </div>
 </div>

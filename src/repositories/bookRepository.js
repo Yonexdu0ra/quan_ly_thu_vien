@@ -1,18 +1,65 @@
+const { Op } = require("sequelize");
 const { Book, Author, Category } = require("../models");
 
 class BookRepository {
-  static async findAllWithAuthorAndCategory(options = {}) {
-    return Book.findAll({
-      include: [
-        { model: Author, as: "author" },
-        { model: Category, as: "category" },
-      ],
+  static async findAllWithAuthorAndCategory(
+    {
+      search,
+      sortBy = "published_year",
+      order = "ASC",
+      page = 1,
+      limit = 5,
+    } = {},
+    opts = {}
+  ) {
+    const options = {};
+    const where = {};
+    if (search) {
+      where.title = { [Op.like]: `%${search}%` };
+    }
+    if (sortBy) {
+      options.order = [[sortBy, order]];
+    }
+
+    const include = [
+      { model: Author, as: "author" },
+      { model: Category, as: "category" },
+    ];
+    return Book.findAndCountAll({
+      include,
+      where,
+      limit,
+      offset: (page - 1) * limit,
       ...options,
+      ...opts,
     });
   }
 
-  static async findAll(options = {}) {
-    return Book.findAll(options);
+  static async findAll(
+    {
+      search,
+      sortBy = "published_year",
+      order = "ASC",
+      page = 1,
+      limit = 5,
+    } = {},
+    opts = {}
+  ) {
+    const options = {};
+    const where = {};
+    if (search) {
+      where.title = { [Op.like]: `%${search}%` };
+    }
+    if (sortBy) {
+      options.order = [[sortBy, order]];
+    }
+    return Book.findAndCountAll({
+      where,
+      ...options,
+      limit,
+      offset: (page - 1) * limit,
+      ...opts,
+    });
   }
 
   static async findById(id, options = {}) {

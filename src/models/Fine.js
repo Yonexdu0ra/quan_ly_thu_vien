@@ -27,6 +27,10 @@ const Fine = sequelize.define("Fines", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    }
 }, {
     tableName: "fines",
     timestamps: true

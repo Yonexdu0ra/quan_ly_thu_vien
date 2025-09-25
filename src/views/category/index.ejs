@@ -1,65 +1,99 @@
 <div class="container mt-5">
+  <h1 class="mb-4">Quản lý Danh mục</h1>
+  <a href="/categories/add" class="btn btn-success mb-3">Thêm danh mục mới</a>
+  <!-- Form thêm danh mục -->
 
-    <h1 class="mb-4">Quản lý Danh mục</h1>
-    <a href="/categories/add" class="btn btn-success mb-3">Thêm danh mục mới</a>
-    <!-- Form thêm danh mục -->
-     <form action="">
-        <input type="text" class="form-control" placeholder="Tìm kiếm danh mục..." name="search" value="<%= typeof search !== 'undefined' ? search : '' %>"/>
-        <button class="btn btn-outline-secondary mt-2" type="submit">Tìm kiếm</button>
-     </form>
-    <div class="card mb-4">
-        <div class="card-body">
-            <form action="/categories/add" method="POST" class="row g-3 align-items-center">
-                <div class="col-auto flex-grow-1">
-                    <input type="text" name="name" class="form-control" placeholder="Tìm kiếm theo tên danh mục" required minlength="3" maxlength="100">
-                </div>
-                <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                </div>
-            </form>
+  <div class="card mb-4">
+    <div class="card-body">
+      <form
+        action=""
+        class="row g-3 align-items-center"
+      >
+        <div class="d-flex flex-row gap-4">
+          <input
+            type="text"
+            name="search"
+            value="<%= query.search %>"
+            class="form-control"
+            placeholder="Tìm kiếm theo tên danh mục"
+            
+          />
+          <select class="form-select" name="sort" id="sort">
+            <option value="DESC" <%= query.sort === 'DESC' ? 'selected' : '' %>>
+              Mới nhất
+            </option>
+            <option value="ASC" <%= query.sort === 'ASC' ? 'selected' : '' %>>
+              Cũ nhất
+            </option>
+          </select>
         </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-  
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Tên danh mục</th>
-                        <th>Ngày tạo</th>
-                        <th>Ngày cập nhật</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% categories?.forEach((category, index) => { %>
-                        <tr>
-                            <td><%= index + 1 %></td>
-                            <td>
-                                <a href="/categories/<%= category.id %>" class="text-decoration-none">
-                                    <%= category.name %>
-                                </a>
-                            </td>
-                            <td><%= category.createdAt.toLocaleDateString() %></td>
-                            <td><%= category.updatedAt.toLocaleDateString() %></td>
-                            <td>
-                                <a href="/categories/edit/<%= category.id %>" class="btn btn-sm btn-warning me-2">Sửa</a>
-                                <a href="/categories/delete/<%= category.id %>" class="btn btn-sm btn-danger">Xóa</a>
-                            </td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-            <% if (categories?.length === 0) { %>
-                <p class="text-center text-muted">Chưa có danh mục nào.</p>
-            <% } %>
-        </div>
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Tên danh mục</th>
+            <th>Ngày tạo</th>
+            <th>Ngày cập nhật</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% categories?.forEach((category, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td>
+              <a
+                href="/categories/<%= category.id %>"
+                class="text-decoration-none"
+              >
+                <%= category.name %>
+              </a>
+            </td>
+            <td><%= category.createdAt.toLocaleDateString() %></td>
+            <td><%= category.updatedAt.toLocaleDateString() %></td>
+            <td>
+              <a
+                href="/categories/edit/<%= category.id %>"
+                class="btn btn-sm btn-warning me-2"
+                >Sửa</a
+              >
+              <a
+                href="/categories/delete/<%= category.id %>"
+                class="btn btn-sm btn-danger"
+                >Xóa</a
+              >
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% if (categories?.length === 0) { %>
+      <p class="text-center text-muted">Chưa có danh mục nào.</p>
+      <% } %>
     </div>
-    <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
-    <span class="btn btn-primary">trang trước</span>
-    <span>1 / 2</span>
-    <span class="btn btn-primary">trang sau</span>
+  </div>
+  <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
+    <a
+      class="btn btn-primary"
+      <%= page <= 1 ? "hidden" : "" %>
+      href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang trước</a
+    >
+    <span><%= page %> / <%= totalPages %></span>
+    <a
+      class="btn btn-primary"
+      <%= page >= totalPages ? "hidden" : "" %>
+      href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang sau</a
+    >
   </div>
 </div>

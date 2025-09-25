@@ -3,13 +3,22 @@
 
   <a href="/books/add" class="btn btn-primary mb-3">Thêm sách mới</a>
   <form>
-    <input
+    <div class="d-flex flex-row gap-4">
+      <input
       class="form-control me-2 mb-3"
       type="search"
       placeholder="Tìm kiếm sách..."
-      aria-label="Search"
+      name="search"
+      value="<%= query.search || "" %>"
     />
-    <button class="btn btn-outline-success mb-3" type="submit">Tìm</button>
+      <select class="form-select me-2 mb-3" name="sort">
+        <option value="published_year-ASC" <%= query.sort === "published_year_ASC" ? "selected" : "" %>>Năm xuất bản cũ tới mới</option>
+        <option value="published_year-DESC" <%= query.sort === "published_year-DESC" ? "selected" : "" %>>Năm xuất bản mới tới cũ</option>
+        <option value="quantity_available-ASC" <%= query.sort === "quantity_available-ASC" ? "selected" : "" %>>Số lượng (Thấp - Cao)</option>
+        <option value="quantity_available-DESC" <%= query.sort === "quantity_available-DESC" ? "selected" : "" %>>Số lượng (Cao - Thấp)</option>
+      </select>
+    </div>
+    <button class="btn btn-outline-success my-2-3" type="submit">Tìm</button>
   </form>
   <table class="table table-hover align-middle">
     <thead class="table-light">
@@ -36,8 +45,8 @@
           <a  href="/books/<%= book.id %>"><%= book.title %></a>
         </td>
         <td><%= book.isbn %></td>
-        <td><%= book.author.name %></td>
-        <td><%= book.category.name %></td>
+        <td><a href="/authors/<%= book.author.id %>"><%= book.author.name %></a></td>
+        <td><a href="/categories/<%= book.category.id %>"><%= book.category.name %></a></td>
         <td><%= book.published_year %></td>
         <td><%= book.quantity_available %> / <%= book.quantity_total %></td>
         <td>
@@ -59,8 +68,18 @@
     </tbody>
   </table>
   <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
-    <span class="btn btn-primary">trang trước</span>
-    <span>1 / 2</span>
-    <span class="btn btn-primary">trang sau</span>
+    <a
+      class="btn btn-primary"
+      <%= page <= 1 ? "hidden" : "" %>
+      href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang trước</a
+    >
+    <span><%= page %> / <%= totalPages %></span>
+    <a
+      class="btn btn-primary"
+      <%= page >= totalPages ? "hidden" : "" %>
+      href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang sau</a
+    >
   </div>
 </div>

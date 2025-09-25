@@ -2,19 +2,24 @@
   <h1 class="mb-4">Quản lý Tác giả</h1>
 
   <a href="/authors/add" class="btn btn-primary mb-3">Thêm tác giả mới</a>
-  <form action="/authors" method="GET" class="d-flex mb-3" role="search">
-    <input
+  <form action="" method="GET" >
+   <div class="d-flex gap-4 flex-row">
+     <input
       class="form-control me-2"
       type="search"
-      name="q"
+      name="search"
       placeholder="Tìm kiếm tác giả..."
-      value="<%= typeof query !== 'undefined' ? query : '' %>"
-      aria-label="Search"
+      value="<%= query.search %>"
     />
-    <button class="btn btn-outline-success" type="submit">Tìm</button>
+    <select class="form-select" name="sort" id="">
+      <option value="ASC" <%= query.sort === 'ASC' ? 'selected' : '' %>>Tăng dần</option>
+      <option value="DESC" <%= query.sort === 'DESC' ? 'selected' : '' %>>Giảm dần</option>
+    </select>
+   </div>
+    <button class="btn btn-primary my-2" type="submit">Tìm</button>
   </form>
-  <table class="table table-hover align-middle">
-    <thead class="table-light">
+  <table class="table table-hover table-striped table-bordered">
+    <thead class="table-dark">
       <tr>
         <th>#</th>
         <th>Tên tác giả</th>
@@ -52,8 +57,18 @@
     </tbody>
   </table>
   <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
-    <span class="btn btn-primary">trang trước</span>
-    <span>1 / 2</span>
-    <span class="btn btn-primary">trang sau</span>
+    <a
+      class="btn btn-primary"
+      <%= page <= 1 ? "hidden" : "" %>
+      href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang trước</a
+    >
+    <span><%= page %> / <%= totalPages %></span>
+    <a
+      class="btn btn-primary"
+      <%= page >= totalPages ? "hidden" : "" %>
+      href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+      >trang sau</a
+    >
   </div>
 </div>

@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { Borrow, Book, User, Fine } = require("../models");
 
 class BorrowRepository {
@@ -5,16 +6,84 @@ class BorrowRepository {
     return Borrow.findAll(options);
   }
 
-  static async findAllWithUserAndBookAndFine(options = {}) {
-    return Borrow.findAll({
-      include: [
-        { model: Book, as: "book" },
-        { model: User, as: "borrower" },
-        { model: User, as: "approver" },
-        { model: Fine, as: "fine" },
-      ],
+  static async findAllWithUserAndBookAndFine({
+    search,
+    sortBy = "id",
+    order = "ASC",
+    limit = 10,
+    offset = 0,
+  } = {}) {
+    const include = [
+      { model: Book, as: "book" },
+      { model: User, as: "borrower" },
+      { model: User, as: "approver" },
+      { model: Fine, as: "fine" },
+    ];
+
+    const where = {};
+    const options = {};
+    if (search) {
+      include[0].where = {
+        title: {
+          [Op.like]: `%${search || ""}%`,
+        },
+      };
+    }
+    // console.log(include[0]);
+
+    if (sortBy) {
+      options.order = [[sortBy, order]];
+    }
+    const borrows = await Borrow.findAndCountAll({
+      include,
+      where,
+      limit,
+      offset,
       ...options,
     });
+    return borrows;
+  }
+  static async findAllWithUserAndBookAndFineByUserId(
+    userId,
+    { search, sortBy = "id", order = "ASC", limit = 10, offset = 0 } = {}
+  ) {
+    // console.log(order);
+    const include = [
+      { model: Book, as: "book" },
+      { model: User, as: "borrower" },
+      { model: User, as: "approver" },
+      { model: Fine, as: "fine" },
+    ];
+
+    const where = {
+      borrow_id: userId,
+    };
+    // console.log(where);
+
+    const options = {};
+    if (search) {
+      include[0].where = {
+        title: {
+          [Op.like]: `%${search || ""}%`,
+        },
+      };
+    }
+
+    if (sortBy) {
+      options.order = [[sortBy, order]];
+    }
+    // console.log(where);
+
+    const borrows = await Borrow.findAndCountAll({
+      include,
+      where,
+      limit,
+      offset,
+      ...options,
+    });
+    // console.log(borrows);
+
+    return borrows;
   }
 
   static async findById(id, options = {}) {

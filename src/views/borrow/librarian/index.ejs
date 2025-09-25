@@ -1,13 +1,28 @@
 <h1 class="mb-4">Danh sách phiếu mượn</h1>
 <!-- <a href="/borrows/add" class="btn btn-primary mb-3">Thêm phiếu mượn</a> -->
 <form action="">
-  <input type="text" class="form-control" placeholder="Tìm kiếm phiếu mượn..." name="search" value="<%= typeof search !== 'undefined' ? search : '' %>"/>
-  <button class="btn btn-outline-secondary mt-2" type="submit">Tìm kiếm</button>
+  <div class="d-flex flex-row gap-4">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Tìm kiếm theo tên sách..."
+      name="search"
+      value="<%= query.search %>"
+    />
+    <select class="form-select" name="sort" id="sort">
+      <option value="">-- Sắp xếp theo --</option>
+      <% borrowStatus.forEach(status => { %>
+        <option value="<%= status[0] %>" <%= query.sort === status[0] ? 'selected' : '' %>><%= status[1] %></option>
+      <% }) %>
+      <option value="DESC" <%= query.sort === 'DESC' ? 'selected' : '' %>>Ngày mượn mới nhất</option>
+      <option value="ASC" <%= query.sort === 'ASC' ? 'selected' : '' %>>Ngày mượn cũ nhất</option>
+    </select>
+  </div>
+  <button class="btn btn-primary my-2" type="submit">Tìm kiếm</button>
 </form>
-<table class="table table-striped table-hover">
-  <thead>
+<table class="table table-striped table-hover table-bordered">
+  <thead class="table-dark">
     <tr>
-      <th>ID</th>
       <th>Sách</th>
       <th>Người mượn</th>
       <th>Ngày yêu cầu mượn</th>
@@ -21,7 +36,7 @@
   <tbody>
     <% borrows.forEach(b => { %>
     <tr>
-      <td><%= b.id %></td>
+      
       <td><%= b.book.title %></td>
       <td><%= b.borrower.fullname %></td>
       <td><%= new Date(b.borrow_date).toLocaleDateString() %></td>
@@ -34,21 +49,20 @@
       <td>
         <%= b.pickup_date ? new Date(b.pickup_date).toLocaleDateString() : '' %>
       </td>
-      <td><%= b.status %></td>
-      <td>
+      <td><%= borrowStatusMap[b.status] %></td>
+      <td class="d-flex flex-row gap-2 flex-wrap">
         <a
           href="/borrows/librarian/detail/<%= b.id %>"
           class="btn btn-info btn-sm"
           >Xem chi tiết</a
         >
-        <% if(b.status === "Đã duyệt, chờ lấy") { %>
+        <% if(b.status === borrowStatusConstants.APPROVED) { %>
         <a
           href="/borrows/librarian/pickup/<%= b.id %>"
           class="btn btn-success btn-sm"
           >Xác nhận lấy sách</a
         >
-        <% }  %>
-        <% if(b.status === "Đang yêu cầu mượn") { %>
+        <% } %> <% if(b.status === borrowStatusConstants.REQUESTED) { %>
         <a
           href="/borrows/librarian/approve/<%= b.id %>"
           class="btn btn-success btn-sm"
@@ -60,35 +74,31 @@
           >Từ chối</a
         >
 
-        <% }  %>
-        <% if(b.status === "Đang mượn") { %>
-            <a
+        <% } %> <% if(b.status === borrowStatusConstants.BORROWED) { %>
+        <a
           href="/borrows/librarian/expire/<%= b.id %>"
           class="btn btn-warning btn-sm"
-          >Đánh dấu quá hạn
-         </a>
-        <% }  %>
-        <% if(b.status === "Đang mượn" || b.status === "Quá hạn") { %>
-            <a
+          >Quá hạn
+        </a>
+        <a
+          href="/borrows/librarian/renew/<%= b.id %>"
+          class="btn btn-warning btn-sm"
+          >Gia hạn
+        </a>
+        <% } %> <% if(b.status === borrowStatusConstants.BORROWED || b.status === borrowStatusConstants.EXPIRED) { %>
+        <a
           href="/borrows/librarian/return/<%= b.id %>"
           class="btn btn-success btn-sm"
           >Đã trả
-         </a>
-        <% }  %>
-        <!-- <% if(!["Đang yêu cầu mượn", "Từ chối", "Đã hủy"].includes(b.status)) { %>
-        <a
-          href="/borrows/librarian/edit/<%= b.id %>"
-          class="btn btn-warning btn-sm"
-          >Cập nhật phiếu mượn</a
-        >
-        <% } %> -->
+        </a>
+        <% } %>
       </td>
     </tr>
     <% }) %>
   </tbody>
 </table>
 <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
-    <span class="btn btn-primary">trang trước</span>
-    <span>1 / 2</span>
-    <span class="btn btn-primary">trang sau</span>
-  </div>
+  <a class="btn btn-primary" <%= page <= 1 ? "hidden" : "" %> href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>">trang trước</a>
+  <span><%= page %> / <%= totalPages %></span>
+  <a class="btn btn-primary" <%= page >= totalPages ? "hidden" : "" %> href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>">trang sau</a>
+</div>

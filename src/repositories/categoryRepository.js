@@ -1,14 +1,41 @@
+const { Op } = require("sequelize");
 const { Category, Book } = require("../models");
 
 class CategoryRepository {
-  static async findAll(options = {}) {
-    return Category.findAll({
-      include: [{ model: Book, as: "books" }],
+  static async findAll({
+    search = "",
+    sortBy,
+    order,
+    page = 1,
+    limit = 5,
+  } = {}) {
+    const where = {};
+    const options = {};
+    if (search) {
+      where.name = {
+        [Op.like]: `%${search}%`,
+      };
+    }
+    if (sortBy) {
+      options.order = [[sortBy, order]];
+    }
+    // console.log(sortBy, order);
+
+    return Category.findAndCountAll({
+      where,
+      limit,
+      offset: (page - 1) * limit,
       ...options,
     });
   }
 
   static async findById(id, options = {}) {
+    return Category.findByPk(id, {
+      include: [{ model: Book, as: "books" }],
+      ...options,
+    });
+  }
+  static async findByIdWithBooks(id, options = {}) {
     return Category.findByPk(id, {
       include: [{ model: Book, as: "books" }],
       ...options,

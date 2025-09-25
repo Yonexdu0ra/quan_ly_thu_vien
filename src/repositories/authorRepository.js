@@ -1,18 +1,39 @@
+const { Op } = require("sequelize");
 const { Author, Book } = require("../models");
 
 class AuthorRepository {
-  static async findAll(options = {}) {
-    return Author.findAll({
-      include: [{ model: Book, as: "books" }],
+  static async findAll({
+    search = "",
+    sortBy = "createdAt",
+    order = "ASC",
+    page = 1,
+    limit = 5,
+  } = {}) {
+    const where = {};
+    const options = {};
+    if (search) {
+      where.name = { [Op.like]: `%${search}%` };
+    }
+    if (sortBy) {
+      options.order = [[sortBy, order]];
+    }
+
+    return Author.findAndCountAll({
+      where,
+      limit,
+      offset: (page - 1) * limit,
       ...options,
     });
   }
 
-  static async findById(id, options = {}) {
+  static async findByIdWithBooks(id, options = {}) {
     return Author.findByPk(id, {
       include: [{ model: Book, as: "books" }],
       ...options,
     });
+  }
+  static async findById(id, options = {}) {
+    return Author.findByPk(id, options);
   }
 
   static async create(data, options = {}) {

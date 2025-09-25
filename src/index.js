@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const authMiddleware = require("./middleware/authMiddleware");
 const bcrypt = require("bcrypt");
 const BookService = require("./services/BookService");
-
+const { STATUS_BORROW, STATUS_BORROW_REVERSE, BORROW_STATUS_CONSTANTS } = require("./utils/constants");
 
 const app = express();
 app.use(express.json())
@@ -29,7 +29,10 @@ app.use((req, res, next) => {
     res.locals.layout = layout;
     res.locals.role = role;
     res.locals.fullname = req?.user?.fullname;
-    res.locals.borrowStatus = ["Đang yêu cầu mượn", "Đã duyệt, chờ lấy", "Từ chối", "Đang mượn", "Đã trả", "Quá hạn", "Đã hủy"]
+    res.locals.borrowStatus = Object.entries(STATUS_BORROW);
+    res.locals.borrowStatusMap = STATUS_BORROW;
+    res.locals.borrowStatusReverse = STATUS_BORROW_REVERSE;
+    res.locals.borrowStatusConstants = BORROW_STATUS_CONSTANTS;
     next();
 });
 
@@ -43,7 +46,7 @@ app.get('/forbidden', (req, res) => {
 });
 
 app.get("/",async (req, res) => {
-    const books =await  BookService.getAllBooks();
+    const { count, rows: books} =await  BookService.getAllBooks();
     // console.log(books);
     
     res.render("index", { title: "Trang chủ", books });
