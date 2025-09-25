@@ -57,7 +57,13 @@ class AccountRepository {
   static async findByUsername(username, options = {}) {
     return Account.findOne({
       where: { username },
-      
+      ...options,
+    });
+  }
+  static async findByUsernameWithUser(username, options = {}) {
+    return Account.findOne({
+      where: { username },
+      include: { model: User, as: "user" },
       ...options,
     });
   }
