@@ -25,6 +25,15 @@ class FineService {
             return { count: 0, rows: []};
         }
     }
+    static async getFineById(id) {
+        try {
+            const fine = await FineRepository.findById(id);
+            if(!fine) throw new Error('Fine not found');
+            return fine;
+        } catch (error) {
+            throw error;
+        }
+    }
     static async getFineByIdFineWithBorrowerAndBookAndUser(id) {
         try {
 

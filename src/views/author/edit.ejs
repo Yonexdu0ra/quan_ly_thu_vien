@@ -7,7 +7,7 @@
                 <input type="text" name="name" id="name" class="form-control" value="<%= author.name %>" required minlength="3" maxlength="100">
             </div>
             <button type="submit" class="btn btn-success">Lưu thay đổi</button>
-            <a href="/authors" class="btn btn-secondary">Quay lại</a>
+            <%- include("../partials/back") %>
         </form>
     </div>
 </div>

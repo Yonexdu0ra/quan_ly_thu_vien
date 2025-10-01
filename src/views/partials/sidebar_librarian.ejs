@@ -1,0 +1,9 @@
+<ul class="nav nav-pills  flex-column gap-2 p-2">
+  <a class="nav-link <%= currentPath === '/' ? 'active' : '' %>" href="/"> Dashboard</a>
+  <a class="nav-link <%= currentPath === '/users' ? 'active' : '' %>" href="/users">Quản lý người dùng</a>
+  <a class="nav-link <%= currentPath === '/borrows/librarian' ? 'active' : '' %>" href="/borrows/librarian">Quản lý Mượn/trả</a>
+  <a class="nav-link <%= currentPath === '/fines' ? 'active' : '' %>" href="/fines">Quản lý Phạt</a>
+  <a class="nav-link <%= currentPath === '/categories' ? 'active' : '' %>" href="/categories">Quản lý danh mục</a>
+  <a class="nav-link <%= currentPath === '/books' ? 'active' : '' %>" href="/books">Quản lý Sách</a>
+  <a class="nav-link <%= currentPath === '/authors' ? 'active' : '' %>" href="/authors">Quản lý Tác giả</a>
+</ul>

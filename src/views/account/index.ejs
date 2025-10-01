@@ -1,5 +1,6 @@
 <h1 class="mb-4">Danh sách tài khoản</h1>
 <a href="/accounts/add" class="btn btn-primary mb-3">Thêm tài khoản</a>
+<%- include('../partials/error') %>
 <form class="mb-3" method="GET" action="/accounts">
   <div class="d-flex flex-row gap-2">
       <input
@@ -21,10 +22,10 @@
     </div>
     <button class="btn btn-primary my-2">Tìm kiếm</button>
 </form>
-<table class="table table-striped table-hover">
-    <thead>
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-dark">
         <tr>
-            <th>ID</th>
+            <!-- <th>ID</th> -->
             <th>Username</th>
             <th>Role</th>
             <th>Họ tên</th>
@@ -35,7 +36,7 @@
     <tbody>
         <% accounts.forEach(acc => { %>
             <tr>
-                <td><%= acc.id %></td>
+                <!-- <td><%= acc.id %></td> -->
                 <td><%= acc.username %></td>
                 <td><%= acc.role %></td>
                 <td><%= acc.user ? acc.user.fullname : "-" %></td>

@@ -1,0 +1,12 @@
+<h2 class="alert alert-danger" id="error"></h2>
+<script>
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
+  const errorMessage = params.get("error");
+  if (errorMessage) {
+    const decodedMessage = atob(errorMessage);
+    document.getElementById("error").innerText = decodedMessage;
+  } else {
+    document.getElementById("error").style.display = "none";
+  }
+</script>

@@ -13,7 +13,7 @@ class AccountController {
 
     // Hiển thị form thêm tài khoản
     static async add(req, res) {
-        return res.render("account/add", { title: "Thêm tài khoản", error: null });
+        return res.render("account/add", { title: "Thêm tài khoản", oldData: {} });
     }
 
     // Xử lý POST thêm tài khoản + user
@@ -44,7 +44,7 @@ class AccountController {
         } catch (err) {
             await t.rollback();
             console.error(err);
-            return res.status(500).send("Có lỗi xảy ra khi tạo tài khoản");
+            return res.render("account/add", { title: "Thêm tài khoản", error: err.message, oldData: req.body });
         }
     }
 
@@ -52,7 +52,7 @@ class AccountController {
     static async edit(req, res) {
         const accountId = req.params.id;
         const account = await AccountService.getAccountByIdWithUser(accountId);
-        if (!account) return res.status(404).send("Tài khoản không tồn tại");
+        if (!account) return res.redirect('/not-found');
 
         return res.render("account/edit", { title: "Chỉnh sửa tài khoản", account, error: null });
     }
@@ -88,17 +88,22 @@ class AccountController {
         } catch (err) {
             await transaction.rollback();
             console.error(err);
-            return res.status(500).send("Có lỗi xảy ra khi cập nhật tài khoản");
+            return res.render("account/edit", { title: "Chỉnh sửa tài khoản", account: { id: req.params.id, ...req.body, user: { ...req.body } }, error: err.message });
         }
     }
 
     // Hiển thị chi tiết tài khoản
     static async detail(req, res) {
-        const accountId = req.params.id;
-        const account = await AccountService.getAccountByIdWithUser(accountId);
-        if (!account) return res.status(404).send("Tài khoản không tồn tại");
+        try {
+            const accountId = req.params.id;
+            const account = await AccountService.getAccountByIdWithUser(accountId);
+            if (!account) return res.redirect('/not-found');
 
-        return res.render("account/detail", { title: "Chi tiết tài khoản", account });
+            return res.render("account/detail", { title: "Chi tiết tài khoản", account });
+        } catch (error) {
+            console.error(error);
+            return res.render('notFound', { title: "Không tìm thấy", });
+        }
     }
 
     // Hiển thị form xóa
@@ -106,7 +111,7 @@ class AccountController {
         const accountId = req.params.id;
         const account = await AccountService.getAccountByIdWithUser(accountId);
 
-        if (!account) return res.status(404).send("Tài khoản không tồn tại");
+        if (!account) return res.redirect('/not-found');
 
         return res.render("account/delete", { title: "Xóa tài khoản", account, error: null });
     }

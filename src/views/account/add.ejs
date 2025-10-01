@@ -1,21 +1,24 @@
 <h1 class="mb-4">Thêm tài khoản</h1>
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+<% } %>
 
 <form action="/accounts/add" method="POST">
     <h4>Thông tin tài khoản</h4>
     <div class="mb-3">
         <label for="username" class="form-label">Username</label>
-        <input type="text" name="username" id="username" class="form-control" required>
+        <input type="text" name="username" id="username" class="form-control" required value="<%= typeof oldData !== 'undefined' && oldData.username ? oldData.username : '' %>">
     </div>
     <div class="mb-3">
         <label for="password" class="form-label">Password</label>
-        <input type="password" name="password" id="password" class="form-control" required>
+        <input type="password" name="password" id="password" class="form-control" required value="<%= typeof oldData !== 'undefined' && oldData.password ? oldData.password : '' %>">
     </div>
     <div class="mb-3">
         <label for="role" class="form-label">Role</label>
         <select name="role" id="role" class="form-select" required>
-            <option value="Admin">Admin</option>
-            <option value="Librarian">Librarian</option>
-            <option value="Reader">Reader</option>
+            <option value="Admin" <%= typeof oldData !== 'undefined' && oldData.role === 'Admin' ? 'selected' : '' %>>Admin</option>
+            <option value="Librarian" <%= typeof oldData !== 'undefined' && oldData.role === 'Librarian' ? 'selected' : '' %>>Librarian</option>
+            <option value="Reader" <%= typeof oldData !== 'undefined' && oldData.role === 'Reader' ? 'selected' : '' %>>Reader</option>
         </select>
     </div>
 
@@ -26,17 +29,17 @@
     </div>
     <div class="mb-3">
         <label for="email" class="form-label">Email</label>
-        <input type="email" name="email" id="email" class="form-control" required>
+        <input type="email" name="email" id="email" class="form-control" required value="<%= typeof oldData !== 'undefined' && oldData.email ? oldData.email : '' %>">
     </div>
     <div class="mb-3">
         <label for="address" class="form-label">Địa chỉ</label>
-        <input type="text" name="address" id="address" class="form-control" required>
+        <input type="text" name="address" id="address" class="form-control" required value="<%= typeof oldData !== 'undefined' && oldData.address ? oldData.address : '' %>">
     </div>
     <div class="mb-3">
         <label for="phone" class="form-label">Số điện thoại</label>
-        <input type="text" name="phone" id="phone" class="form-control" required>
+        <input type="text" name="phone" id="phone" class="form-control" required value="<%= typeof oldData !== 'undefined' && oldData.phone ? oldData.phone : '' %>">
     </div>
 
     <button type="submit" class="btn btn-success">Thêm</button>
-    <a href="/accounts" class="btn btn-secondary">Quay lại</a>
+    <%- include("../partials/back") %>
 </form>

@@ -2,5 +2,5 @@
   <h2>Bạn có chắc muốn hủy mượn sách <%= borrow.book.title %>?</h2>
   <a href="/borrows/reader" class="btn btn-secondary btn-sm">Quay lại</a>
   <input type="hidden" name="borrow_id" value="<%= borrow.id %>">
-  <button type="submit" class="btn btn-danger btn-sm">Hủy</button>
+  <%- include("../partials/back") %>
 </form>

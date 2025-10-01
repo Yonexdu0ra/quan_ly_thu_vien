@@ -66,7 +66,7 @@ class BookController {
 
       return res.render("book/detail", { title: "Chi tiết sách", book });
     } catch (error) {
-      return res.status(500).send(error.message);
+      return res.redirect('/not-found');
     }
   }
   static async addPost(req, res) {
@@ -111,8 +111,8 @@ class BookController {
     }
   }
   static async editPost(req, res) {
+    const bookId = req.params.id;
     try {
-      const bookId = req.params.id;
       const {
         title,
         author_id,
@@ -124,13 +124,7 @@ class BookController {
         description,
       } = req.body;
       const image_cover = req.file.path;
-      // if (quantity_total < quantity_available) {
-      //   return res
-      //     .status(400)
-      //     .send("Số lượng có sẵn không thể lớn hơn tổng số lượng");
-      // }
-      // console.log(req.file);
-      // console.log(req.files);
+      
 
       const book = await BookService.updateBook(bookId, {
         title,
@@ -146,24 +140,16 @@ class BookController {
 
       return res.redirect("/books");
     } catch (error) {
-      return res.render("/books/edit", {
-        title: "Chỉnh sửa sách",
-        error: error.message,
-        oldData: req.body,
-      });
+      return res.redirect(`/books/edit/${bookId}?error=${btoa(error.message)}`);
     }
   }
   static async deletePost(req, res) {
+    const bookId = req.params.id;
     try {
-      const bookId = req.params.id;
       await BookService.deleteBook(bookId);
       return res.redirect("/books");
     } catch (error) {
-      return res.render("/books/delete", {
-        title: "Xóa sách",
-        error: error.message,
-        oldData: req.body,
-      });
+      return res.redirect(`/books/delete/${bookId}?error=${btoa(error.message)}`);
     }
   }
 }

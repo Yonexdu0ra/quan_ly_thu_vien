@@ -26,4 +26,4 @@
 <% } %> <% if(role === 'Reader' && book.quantity_available > 0) { %>
 <a href="/borrows/reader/add?book_id=<%= book.id %>" class="btn btn-primary">Mượn sách</a>
 <% } %>
-<button onclick="window.navigation.back()" class="btn btn-secondary">Quay lại</button>
+<%- include("../partials/back") %>

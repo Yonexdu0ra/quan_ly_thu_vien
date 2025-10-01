@@ -1,5 +1,9 @@
 <h1 class="mb-4">Sửa tài khoản #<%= account.id %></h1>
-
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger mt-4">
+        <%= error %>
+    </div>
+<% } %>
 <form action="/accounts/edit/<%= account.id %>" method="POST">
     <h4>Thông tin tài khoản</h4>
     <div class="mb-3">
@@ -34,5 +38,5 @@
     </div>
 
     <button type="submit" class="btn btn-success">Lưu thay đổi</button>
-    <a href="/accounts" class="btn btn-secondary">Quay lại</a>
+    <%- include("../partials/back") %>
 </form>

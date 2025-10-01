@@ -4,5 +4,5 @@
 
 <form action="/accounts/delete/<%= account.id %>" method="POST">
     <button type="submit" class="btn btn-danger">Xóa</button>
-    <a href="/accounts" class="btn btn-secondary">Hủy</a>
+    <%- include("../partials/back") %>
 </form>

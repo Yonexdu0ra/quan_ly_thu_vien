@@ -1,23 +1,24 @@
-<div class="container mt-5">
-  <h1 class="mb-4">Quản lý Tác giả</h1>
+<h1 class="mb-4">Quản lý Tác giả</h1>
 
-  <a href="/authors/add" class="btn btn-primary mb-3">Thêm tác giả mới</a>
-  <form action="" method="GET" >
-   <div class="d-flex gap-4 flex-row">
-     <input
-      class="form-control me-2"
-      type="search"
-      name="search"
-      placeholder="Tìm kiếm tác giả..."
-      value="<%= query.search %>"
-    />
-    <select class="form-select" name="sort" id="">
-      <option value="ASC" <%= query.sort === 'ASC' ? 'selected' : '' %>>Tăng dần</option>
-      <option value="DESC" <%= query.sort === 'DESC' ? 'selected' : '' %>>Giảm dần</option>
-    </select>
-   </div>
-    <button class="btn btn-primary my-2" type="submit">Tìm</button>
-  </form>
+  <%- include('../partials/error') %>
+<a href="/authors/add" class="btn btn-primary mb-3">Thêm tác giả mới</a>
+<form action="" method="GET" >
+ <div class="d-flex gap-4 flex-row">
+   <input
+    class="form-control me-2"
+    type="search"
+    name="search"
+    placeholder="Tìm kiếm tác giả..."
+    value="<%= query.search %>"
+  />
+  <select class="form-select" name="sort" id="">
+    <option value="ASC" <%= query.sort === 'ASC' ? 'selected' : '' %>>Tăng dần</option>
+    <option value="DESC" <%= query.sort === 'DESC' ? 'selected' : '' %>>Giảm dần</option>
+  </select>
+ </div>
+  <button class="btn btn-primary my-2" type="submit">Tìm</button>
+</form>
+<div class="table-responsive">
   <table class="table table-hover table-striped table-bordered">
     <thead class="table-dark">
       <tr>
@@ -56,19 +57,19 @@
       
     </tbody>
   </table>
-  <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
-    <a
-      class="btn btn-primary"
-      <%= page <= 1 ? "hidden" : "" %>
-      href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
-      >trang trước</a
-    >
-    <span><%= page %> / <%= totalPages %></span>
-    <a
-      class="btn btn-primary"
-      <%= page >= totalPages ? "hidden" : "" %>
-      href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
-      >trang sau</a
-    >
-  </div>
+</div>
+<div class="d-flex justify-content-center gap-4 align-items-center mt-3">
+  <a
+    class="btn btn-primary"
+    <%= page <= 1 ? "hidden" : "" %>
+    href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+    >trang trước</a
+  >
+  <span><%= page %> / <%= totalPages %></span>
+  <a
+    class="btn btn-primary"
+    <%= page >= totalPages ? "hidden" : "" %>
+    href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
+    >trang sau</a
+  >
 </div>

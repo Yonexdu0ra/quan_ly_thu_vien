@@ -15,7 +15,7 @@ router.post("/reader/cancel/:id", BorrowController.markAsCancelled);
 
 
 router.get("/librarian", requireRoleLibrarianOrAdmin, BorrowController.indexLibrarian);
-router.get("/librarian/edit/:id", requireRoleLibrarianOrAdmin, BorrowController.updateLibrarian);
+// router.get("/librarian/edit/:id", requireRoleLibrarianOrAdmin, BorrowController.updateLibrarian);
 router.get("/librarian/detail/:id", requireRoleLibrarianOrAdmin, BorrowController.detailLibrarian);
 router.get("/librarian/approve/:id", requireRoleLibrarianOrAdmin, BorrowController.markAsAcceptedPost);
 router.get("/librarian/reject/:id", requireRoleLibrarianOrAdmin, BorrowController.markAsRejectedPost);

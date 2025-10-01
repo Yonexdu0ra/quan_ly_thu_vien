@@ -33,6 +33,7 @@ app.use((req, res, next) => {
     res.locals.borrowStatusMap = STATUS_BORROW;
     res.locals.borrowStatusReverse = STATUS_BORROW_REVERSE;
     res.locals.borrowStatusConstants = BORROW_STATUS_CONSTANTS;
+    res.locals.currentPath = req.path;
     next();
 });
 

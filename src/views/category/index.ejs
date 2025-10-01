@@ -1,11 +1,7 @@
-<div class="container mt-5">
-  <h1 class="mb-4">Quản lý Danh mục</h1>
-  <a href="/categories/add" class="btn btn-success mb-3">Thêm danh mục mới</a>
-  <!-- Form thêm danh mục -->
-
-  <div class="card mb-4">
-    <div class="card-body">
-      <form
+<h1 class="mb-4">Quản lý Danh mục</h1>
+<a href="/categories/add" class="btn btn-success mb-3">Thêm danh mục mới</a>
+<%- include('../partials/error') %>
+<form
         action=""
         class="row g-3 align-items-center"
       >
@@ -31,13 +27,10 @@
           <button type="submit" class="btn btn-primary">Tìm kiếm</button>
         </div>
       </form>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-body">
-      <table class="table table-hover align-middle">
-        <thead class="table-light">
+<div class="table-responsive mt-2">
+ 
+  <table class="table table-hover align-middle">
+        <thead class="table-dark">
           <tr>
             <th>#</th>
             <th>Tên danh mục</th>
@@ -79,21 +72,6 @@
       <% if (categories?.length === 0) { %>
       <p class="text-center text-muted">Chưa có danh mục nào.</p>
       <% } %>
-    </div>
-  </div>
-  <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
-    <a
-      class="btn btn-primary"
-      <%= page <= 1 ? "hidden" : "" %>
-      href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
-      >trang trước</a
-    >
-    <span><%= page %> / <%= totalPages %></span>
-    <a
-      class="btn btn-primary"
-      <%= page >= totalPages ? "hidden" : "" %>
-      href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
-      >trang sau</a
-    >
-  </div>
+  
 </div>
+<%- include('../partials/pagination', { page, totalPages, query }) %>
