@@ -8,7 +8,7 @@ const authMiddleware = require("./middleware/authMiddleware");
 const bcrypt = require("bcrypt");
 const BookService = require("./services/BookService");
 const { STATUS_BORROW, STATUS_BORROW_REVERSE, BORROW_STATUS_CONSTANTS } = require("./utils/constants");
-const { importCategories, importAuthors, importAccountsAndUsers, importBooks } = require("./seeders");
+// const { importCategories, importAuthors, importAccountsAndUsers, importBooks } = require("./seeders");
 
 const app = express();
 app.use(express.json())
