@@ -1,15 +1,16 @@
 <div class="d-flex justify-content-center gap-4 align-items-center mt-3">
-  <a
-    class="btn btn-primary"
-    <%= page <= 1 ? "hidden" : "" %>
-    href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
-    >trang trước</a
-  >
-  <span><%= page %> / <%= totalPages %></span>
-  <a
-    class="btn btn-primary"
-    <%= page >= totalPages ? "hidden" : "" %>
-    href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>"
-    >trang sau</a
-  >
+  <ul class="pagination">
+    <li class="page-item <%= page <= 1 ? "disabled" : "" %>">
+      <a class="page-link" href="?page=<%= page - 1 %>&sort=<%= query.sort %>&search=<%= query.search %>" tabindex="-1" >Trang trước</a>
+    </li>
+    <!-- <li class="page-item"><a class="page-link" href="#"><%= page - 1%></a></li> -->
+    <li class="page-item active" aria-current="page">
+      <div class="page-link" href="#"><%= page %> / <%= totalPages %></div>
+    </li>
+    <!-- <li class="page-item"><a class="page-link" href="#"><%= page +1 %></a></li> -->
+    <li class="page-item <%= page >= totalPages ? "disabled" : "" %>">
+      <a class="page-link" href="?page=<%= page + 1 %>&sort=<%= query.sort %>&search=<%= query.search %>">Trang Sau</a>
+    </li>
+  </ul>
 </div>
+

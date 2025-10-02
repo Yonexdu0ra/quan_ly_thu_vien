@@ -21,12 +21,12 @@
     <div class="card-header bg-success text-white">
       <h5>Sách trong danh mục</h5>
     </div>
-    <div class="card-body">
+    <div class="table-responsive">
       <% if (category.books && category.books.length > 0) { %>
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>ID</th>
+              <!-- <th>ID</th> -->
               <th>Tiêu đề</th>
               <th>ISBN</th>
               <th>Năm XB</th>
@@ -37,7 +37,7 @@
           <tbody>
             <% category.books.forEach(function(book) { %>
               <tr>
-                <td><%= book.id %></td>
+                <!-- <td><%= book.id %></td> -->
                 <td><%= book.title %></td>
                 <td><%= book.isbn %></td>
                 <td><%= book.published_year %></td>

@@ -1,3 +1,11 @@
+<style>
+  .book-img {
+    width: 100%; /* chiếm full width của card */
+    height: 200px; /* chiều cao cố định vừa phải */
+    object-fit: cover; /* ảnh không méo, tự crop */
+    border-radius: 4px; /* tuỳ chọn bo góc */
+  }
+</style>
 <div id="carouselExampleIndicators" class="carousel slide border rounded">
   <div class="carousel-indicators">
     <button
@@ -60,6 +68,7 @@
 </div>
 
 <h2>Top sách mới của thư viện</h2>
+<a href="/books">Xem tất cả sách</a>
 
 <div class="container mt-4">
   <% if (!books || books.length === 0) { %>
@@ -69,10 +78,16 @@
     <% books.forEach(book => { %>
     <div class="col-12 col-md-6 col-lg-4">
       <div class="card h-100">
-        <img src="<%= book.image_cover %>" class="card-img-top" alt="..." />
+        <img
+          src="<%= book.image_cover %>"
+          class="card-img-top book-img"
+          alt="..."
+        />
         <div class="card-body">
           <h5 class="card-title"><%= book.title %></h5>
-          <p class="card-text"><%= book.description %></p>
+          <p class="card-text text-truncate">
+            <%= book.description %>
+          </p>
           <a href="/books/<%= book.id %>" class="btn btn-primary"
             >Xem chi tiết</a
           >
