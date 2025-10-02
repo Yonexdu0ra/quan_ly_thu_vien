@@ -4,7 +4,7 @@
   const params = new URLSearchParams(url.search);
   const errorMessage = params.get("error");
   if (errorMessage) {
-    const decodedMessage = atob(errorMessage);
+    const decodedMessage = decodeURIComponent(escape(atob(errorMessage)));
     document.getElementById("error").innerText = decodedMessage;
   } else {
     document.getElementById("error").style.display = "none";

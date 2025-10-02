@@ -1,5 +1,5 @@
 const { Category } = require("../models");
-const CategoryRepository = require("../repositories/categoryRepository");
+const CategoryRepository = require("../repositories/CategoryRepository");
 
 class CategoryService {
   static async getAllCategories({ search = "", sort = "", page = 1, limit = 5 } = {}) {

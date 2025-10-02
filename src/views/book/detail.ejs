@@ -16,7 +16,7 @@
 <p><strong>Mô tả:</strong> <%= book.description %></p>
 <div>
   <p><strong>Ảnh bìa</strong></p>
-  <img src="<%= book.image_cover %>" alt="Cover" class="img-fluid my-3" />
+  <img src="<%= book.image_cover %>"  alt="Cover" class="img-fluid my-3" style="max-width: 200px; height: auto;" />
 </div>
 
 <% if(book.quantity_available < 1) { %>

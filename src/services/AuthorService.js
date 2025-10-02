@@ -1,5 +1,5 @@
 const { Author } = require("../models");
-const AuthorRepository = require("../repositories/authorRepository");
+const AuthorRepository = require("../repositories/AuthorRepository");
 
 class AuthorService {
   static async getAllAuthors({ search = "", sort = "", page = 1, limit = 5 } = {}) {
@@ -75,9 +75,12 @@ class AuthorService {
   }
   static async deleteAuthor(id) {
     try {
-      const author = await AuthorRepository.findById(id);
+      const author = await AuthorRepository.findByIdWithBooks(id);
       if (!author) {
         throw new Error("Tác giả không tồn tại");
+      }
+      if (author.books && author.books.length > 0) {
+        throw new Error("Vẫn đang có sách liên kết với tác giả này hiện không thể xóa");
       }
       await AuthorRepository.delete(id);
       return author;

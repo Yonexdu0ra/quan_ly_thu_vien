@@ -2,6 +2,7 @@
 const BookService = require("../services/BookService");
 const AuthorService = require("../services/AuthorService");
 const CategoryService = require("../services/CategoryService");
+const btoaUnicode = require("../utils/btoaUnicode");
 class BookController {
   static async index(req, res) {
     const { search, sort = "", page = 1, limit = 5 } = req.query;
@@ -100,7 +101,8 @@ class BookController {
         image_cover,
         description,
       });
-
+      console.log(book);
+      
       return res.redirect("/books");
     } catch (error) {
       return res.render("/books/add", {
@@ -123,7 +125,7 @@ class BookController {
         quantity_available,
         description,
       } = req.body;
-      const image_cover = req.file.path;
+      const image_cover = req?.file?.path;
       
 
       const book = await BookService.updateBook(bookId, {
@@ -140,7 +142,7 @@ class BookController {
 
       return res.redirect("/books");
     } catch (error) {
-      return res.redirect(`/books/edit/${bookId}?error=${btoa(error.message)}`);
+      return res.redirect(`/books/edit/${bookId}?error=${btoaUnicode(error.message)}`);
     }
   }
   static async deletePost(req, res) {
@@ -149,7 +151,7 @@ class BookController {
       await BookService.deleteBook(bookId);
       return res.redirect("/books");
     } catch (error) {
-      return res.redirect(`/books/delete/${bookId}?error=${btoa(error.message)}`);
+      return res.redirect(`/books/delete/${bookId}?error=${btoaUnicode(error.message || "")}`);
     }
   }
 }

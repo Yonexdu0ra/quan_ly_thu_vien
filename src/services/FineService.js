@@ -1,5 +1,5 @@
 const { Fine } = require("../models");
-const FineRepository = require("../repositories/fineRepository");
+const FineRepository = require("../repositories/FineRepository");
 
 
 class FineService {

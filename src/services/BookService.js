@@ -1,5 +1,5 @@
 const BookRepository = require("../repositories/BookRepository");
-
+const { BORROW_STATUS_CONSTANTS } = require("../utils/constants");
 class BookService {
   static async getAllBooksWithAuthorAndCategory({
     search,
@@ -33,13 +33,13 @@ class BookService {
     try {
       const order = sort.includes("DESC") ? "DESC" : "ASC";
 
-     const sortBy = [
-       "published_year",
-       "quantity_total",
-       "quantity_available",
-     ].includes(sort.split("-")[0])
-       ? sort.split("-")[0]
-       : "published_year";
+      const sortBy = [
+        "published_year",
+        "quantity_total",
+        "quantity_available",
+      ].includes(sort.split("-")[0])
+        ? sort.split("-")[0]
+        : "published_year";
       const books = BookRepository.findAll({
         search,
         sortBy,
@@ -47,7 +47,7 @@ class BookService {
         page,
         limit,
       });
-    //   console.log(books);
+      //   console.log(books);
 
       return books;
     } catch (error) {
@@ -100,6 +100,9 @@ class BookService {
       if (!book) {
         throw new Error("Book not found");
       }
+      if (!bookData.image_cover) {
+        delete bookData.image_cover
+      }
       await book.update(bookData);
       return book;
     } catch (error) {
@@ -108,13 +111,22 @@ class BookService {
   }
   static async deleteBook(id) {
     try {
-      const book = await BookRepository.findById(id);
+      const book = await BookRepository.findBookWithBorrow(id);
+      // console.log(book.borrows);
+
+
       if (!book) {
-        throw new Error("Book not found");
+        throw new Error("Sách không tồn tại không thể xóa");
       }
-      await BookRepository.delete(id);
+
+      if (book.borrows && book.borrows.length > 0 && book.borrows.filter(b => b.status === BORROW_STATUS_CONSTANTS.BORROWED || b.status === BORROW_STATUS_CONSTANTS.OVERDUE).length > 0) throw new Error("Sách đang có người dùng đang mượn hoặc mượn quá hạn không thể xóa");
+
+
+      await BookRepository.update(id, { is_deleted: true });
       return book;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }

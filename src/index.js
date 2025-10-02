@@ -8,6 +8,7 @@ const authMiddleware = require("./middleware/authMiddleware");
 const bcrypt = require("bcrypt");
 const BookService = require("./services/BookService");
 const { STATUS_BORROW, STATUS_BORROW_REVERSE, BORROW_STATUS_CONSTANTS } = require("./utils/constants");
+const { importCategories, importAuthors, importAccountsAndUsers, importBooks } = require("./seeders");
 
 const app = express();
 app.use(express.json())
@@ -56,86 +57,15 @@ app.get("/",async (req, res) => {
 (async () => {
     try {
 
-        // await sequelize.sync({ force: true });
-
+        
         await sequelize.authenticate();
-        // await sequelize.sync({ force: true})
-
-
-        // await Category.create({ name: "Hài hước" });
-        // await Category.create({ name: "Văn học" });
-        // await Category.create({ name: "Kinh dị" });
-        // await Category.create({ name: "Hành động" });
-
-
-        // await Author.create({ name: "Nguyễn Nhật Ánh" });
-        // await Author.create({ name: "Vũ Trọng Phụng" });
-        // await Author.create({ name: "Stephen King" });
-
-        // await Book.create({
-        //     title: "Sống chết mặc bay",
-        //     author_id: 1,
-        //     category_id: 1,
-        //     published_year: 1930,
-        //     isbn: "1234567890123",
-        //     quantity_total: 10,
-        //     quantity_available: 10,
-        //     image_cover: "https://res.cloudinary.com/quydepteai/image/upload/v1758428702/books/unnyc8zypd4fuenc0pss.png"
-        // })
-        // await Book.create({
-        //     title: "Tuổi thơ dữ dội",
-        //     author_id: 2,
-        //     category_id: 2,
-        //     published_year: 1988,
-        //     isbn: "1234567890124",
-        //     quantity_total: 5,
-        //     quantity_available: 5,
-        //     image_cover: "https://res.cloudinary.com/quydepteai/image/upload/v1758428783/books/ywjzxysb8n0oyfdgtxir.png"
-        // })
-
-        // const user = await User.create({
-        //     fullname: "Phạm Ngọc Quý",
-        //     email: "dtc225180267@ictu.edu.vn",
-        //     address: "Thái Nguyên",
-        //     phone: "0123456789",
-        // })
-
-        // const account = await Account.create({
-        //     username: "admin",
-        //     password: await bcrypt.hash("admin123", 10),
-        //     role: "admin",
-        //     user_id: user.id
-        // })
-        // console.log(user);
-
-        // const user2 = await User.create({
-        //     fullname: "Nguyễm Mạnh Cường",
-        //     email: "nmcuong@gmail.com",
-        //     address: "Thái Nguyên",
-        //     phone: "0123456789",
-
-        // })
-        // const account2 = await Account.create({
-        //     username: "nmcuong",
-        //     password: await bcrypt.hash("123456", 10),
-        //     role: "Librarian",
-        //     user_id: user2.id
-        // })
-        // const user3 = await User.create({
-        //     fullname: "Dũng Os",
-        //     email: "dungos@gmail.com"
-        //     , address: "Thái Nguyên",
-        //     phone: "0123456789",
-        // })
-        // const account3 = await Account.create({
-        //     username: "dungos",
-        //     password: await bcrypt.hash("123456", 10),
-        //     role: "Reader",
-        //     user_id: user3.id
-        // })
-        // console.log(user2);
-
-        // console.log(account);
+        
+        // await sequelize.sync({ force: true });
+        // importCategories(Category)
+        // importAuthors(Author)
+        // importAccountsAndUsers(Account, User, sequelize)
+        // importBooks(Book, Author, Category)
+        
         
         
         console.log("Kết nối tới MySQL thành công.");
@@ -145,6 +75,6 @@ app.get("/",async (req, res) => {
 })();
 
 
-app.listen(3003, () => {
-    console.log("Server is running on http://localhost:3003");
+app.listen(3000, () => {
+    console.log("Server is running on http://localhost:3000");
 });

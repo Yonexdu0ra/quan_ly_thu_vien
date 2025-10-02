@@ -1,5 +1,6 @@
 const { Author } = require("../models");
 const AuthorService = require("../services/AuthorService");
+const btoaUnicode = require("../utils/btoaUnicode");
 
 class AuthController {
   static async index(req, res) {
@@ -86,7 +87,7 @@ class AuthController {
       await AuthorService.deleteAuthor(authorId);
       return res.redirect("/authors");
     } catch (error) {
-      return res.render("author/delete", { title: "Xóa tác giả", author: { id: authorId }, error: error.message });
+      return res.redirect(`/authors/delete/${authorId}?error=${btoaUnicode(error.message || "")}`);
     }
   }
 }

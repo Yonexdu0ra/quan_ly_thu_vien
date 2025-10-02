@@ -18,6 +18,20 @@ class AccountService {
             };
         }
     }
+    static async getAllAccountsWithUser(search, sort, page = 1, pageSize = 10) {
+        try {
+            const sortBy = "createdAt";
+            const order = sort === "ASC" ? "ASC" : "DESC";
+            const account = await AccountRepository.findAllWithUser({ search, sortBy, order, page, pageSize });
+            return account;
+        } catch (error) {
+            console.log(error.message);
+
+            return {
+                count: 0, rows: []
+            };
+        }
+    }
     static async getAccountByIdWithUser(id) {
         return await AccountRepository.findByIdWithUser(id);
     }

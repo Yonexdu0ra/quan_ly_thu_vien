@@ -18,6 +18,29 @@ class AccountRepository {
     return Account.findAndCountAll({
       where,
       order: orderOptions,
+      
+      limit,
+      offset: (page - 1) * limit,
+      ...options,
+    });
+  }
+  static async findAllWithUser({ search = "", sortBy = "createdAt", order = "ASC", page = 1, limit = 5 } = {}, options = {}) {
+
+    const where = {};
+    const orderOptions = [];
+    if (search) {
+      where.username = {
+        [Op.like]: `%${search}%`,
+      };
+    }
+    if (sortBy) {
+      orderOptions.push([sortBy, order]);
+    }
+
+    return Account.findAndCountAll({
+      where,
+      order: orderOptions,
+      include: { model: User, as: "user" },
       limit,
       offset: (page - 1) * limit,
       ...options,
@@ -35,7 +58,7 @@ class AccountRepository {
     });
   }
 
-  
+
 
   static async create(data, options = {}) {
     return Account.create(data, options);

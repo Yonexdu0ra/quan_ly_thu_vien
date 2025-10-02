@@ -28,7 +28,5 @@
 </table>
 
 <%- include("../partials/back") %>
-<a href="/accounts/edit/<%= account.id %>" class="btn btn-warning">Sửa</a>
-<form action="/accounts/delete/<%= account.id %>" method="POST" style="display:inline-block;" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
-    <button type="submit" class="btn btn-danger">Xóa</button>
+
 </form>

@@ -5,9 +5,11 @@ const UserService = require("../services/UserService");
 class AccountController {
     // Hiển thị danh sách tài khoản
     static async index(req, res) {
-        const { count, rows: accounts } = await AccountService.getAllAccounts()
+        const { count, rows: accounts } = await AccountService.getAllAccountsWithUser()
         const currentPage = parseInt(req.query.page) || 1;
         const totalPages = Math.ceil(count / 10);
+        // console.log(accounts);
+        
         return res.render("account/index", { title: "Quản lý tài khoản", accounts, totalPages, page: currentPage, query: req.query });
     }
 

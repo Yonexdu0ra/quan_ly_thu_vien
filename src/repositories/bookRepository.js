@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Book, Author, Category } = require("../models");
+const { Book, Author, Category, Borrow } = require("../models");
 
 class BookRepository {
   static async findAllWithAuthorAndCategory(
@@ -13,7 +13,9 @@ class BookRepository {
     opts = {}
   ) {
     const options = {};
-    const where = {};
+    const where = {
+      is_deleted: false,
+    };
     if (search) {
       where.title = { [Op.like]: `%${search}%` };
     }
@@ -34,7 +36,13 @@ class BookRepository {
       ...opts,
     });
   }
-
+  static findBookWithBorrow(id, options = {}) {
+    return Book.findByPk(id, {
+      include: [{ model: Borrow, as: "borrows" }],
+      where: { is_deleted: false },
+      ...options,
+    });
+  }
   static async findAll(
     {
       search,
@@ -46,7 +54,7 @@ class BookRepository {
     opts = {}
   ) {
     const options = {};
-    const where = {};
+    const where = { is_deleted: false };
     if (search) {
       where.title = { [Op.like]: `%${search}%` };
     }
@@ -63,7 +71,10 @@ class BookRepository {
   }
 
   static async findById(id, options = {}) {
-    return Book.findByPk(id, options);
+    return Book.findByPk(id, {
+      where: { is_deleted: false },
+      ...options,
+    });
   }
 
   static async findByIdWithAuthorAndCategory(id, options = {}) {

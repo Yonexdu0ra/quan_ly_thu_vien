@@ -1,0 +1,20 @@
+<!-- <div class="mb-3">
+  <label for="choices-multiple" class="form-label">Chọn nhiều option</label>
+  <select id="choices-multiple" name="myOptions[]" multiple required>
+    <option value="option1">Option 1</option>
+    <option value="option2">Option 2</option>
+    <option value="option3">Option 3</option>
+    <option value="option4">Option 4</option>
+  </select>
+</div> -->
+
+
+<script>
+
+  new Choices("<%= typeof choice_id != 'undefined' ? choice_id : '' %>", {
+    removeItemButton: true,   // cho phép xóa item đã chọn
+    searchEnabled: true,      // cho phép tìm kiếm
+    placeholderValue: 'Chọn...', 
+    noResultsText: 'Không tìm thấy',
+  });
+</script>
