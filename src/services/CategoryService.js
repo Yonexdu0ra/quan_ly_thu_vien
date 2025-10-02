@@ -23,6 +23,19 @@ class CategoryService {
       };
     }
   }
+  static async getAllNoPagination() {
+    try {
+      const categories = await CategoryRepository.findAllNoPagination();
+      return categories;
+    } catch (error) {
+      console.log(error.message);
+
+      return {
+        count: 0,
+        rows: [],
+      };
+    }
+  }
   static async getCategoryById(id) {
     try {
       const category = await CategoryRepository.findById(id);

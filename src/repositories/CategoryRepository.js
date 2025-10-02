@@ -28,7 +28,9 @@ class CategoryRepository {
       ...options,
     });
   }
-
+  static async findAllNoPagination(options) {
+    return Category.findAndCountAll(options);
+  }
   static async findById(id, options = {}) {
     return Category.findByPk(id, {
       include: [{ model: Book, as: "books" }],

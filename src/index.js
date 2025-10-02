@@ -47,12 +47,7 @@ app.get('/forbidden', (req, res) => {
     res.status(403).render('forbidden', { title: 'Không có quyền truy cập' });
 });
 
-app.get("/",async (req, res) => {
-    const { count, rows: books} =await  BookService.getAllBooks();
-    // console.log(books);
-    
-    res.render("index", { title: "Trang chủ", books });
-});
+
 
 (async () => {
     try {
@@ -75,6 +70,6 @@ app.get("/",async (req, res) => {
 })();
 
 
-app.listen(3000, () => {
-    console.log("Server is running on http://localhost:3000");
+app.listen(3002, () => {
+    console.log("Server is running on http://localhost:3002");
 });
